@@ -39570,7 +39570,7 @@ A.Mt.prototype={
 S(a){var s,r,q,p=null,o=t.l,n=A.bm(a,p,o).w
 o=A.bm(a,p,o).w
 n=n.a.a/12
-s=A.azK("cover/cover.png",B.HS)
+s=A.azK("assets/cover/cover.png",B.HS)
 r=A.N(a).p2.y
 r=A.ho(A.aDA(A.bH("\u0110\u0103ng k\xfd",p,p,p,p,r==null?p:r.S4(B.m,B.fj),p,p),new A.acr(),B.I0),52,1/0)
 q=A.N(a).p2.y
@@ -93243,7 +93243,7 @@ B.HN=new A.ao(280,1/0,0,1/0)
 B.HO=new A.ao(48,1/0,48,1/0)
 B.n9=new A.ao(0,640,0,1/0)
 B.na=new A.ao(1/0,1/0,1/0,1/0)
-B.Hn=new A.r0("bg/cover.png",null,null)
+B.Hn=new A.r0("assets/bg/cover.png",null,null)
 B.HR=new A.r5(0,"fill")
 B.ci=new A.t0(3,"noRepeat")
 B.c4=new A.oB(2,"medium")
