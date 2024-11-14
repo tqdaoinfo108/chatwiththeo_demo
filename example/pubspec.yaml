@@ -1,0 +1,29 @@
+name: chatwiththeo
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  device_preview: ^1.2.0
+  another_flutter_splash_screen: ^1.2.1
+  get: ^5.0.0-release-candidate-9.2.1
+  
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  assets:
+    - assets/
+    - assets/bg/
+    - assets/cover/
+
+  #   - images/a_dot_ham.jpeg
+  uses-material-design: true
