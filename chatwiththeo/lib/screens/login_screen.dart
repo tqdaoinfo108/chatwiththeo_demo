@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:chatwiththeo/utils/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../values/app_colors.dart';
 import 'components/button.dart';
@@ -27,7 +31,9 @@ class LoginScreen extends StatelessWidget {
             const Spacer(),
             Image.asset("assets/cover/cover.png", fit: BoxFit.fitWidth),
             const SizedBox(height: 20),
-            AppButton("Đăng nhập", () {}),
+            AppButton("Đăng nhập", () {
+              context.go("/login/detail");
+            }),
             const SizedBox(height: 10),
             AppButton("Đăng ký", () {}, gradient: AppColors.subDefaultGradient),
             const Spacer(),

@@ -1,8 +1,10 @@
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
+import 'package:chatwiththeo/screens/login_screen.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import 'components/app_textfield.dart';
 import 'components/button.dart';
@@ -84,7 +86,9 @@ class LoginDetailScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 30),
-              AppButton("Xác nhận", () {}),
+              AppButton("Xác nhận", () {
+                context.go("/home");
+              }),
               const SizedBox(height: 50),
               SvgPicture.asset("assets/logo_mix.svg")
             ],

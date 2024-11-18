@@ -1,11 +1,13 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:chatwiththeo/screens/login_detail_screen.dart';
+import 'package:chatwiththeo/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import 'screens/home_screen.dart';
-import 'screens/login_detail_screen.dart';
-import 'screens/login_screen.dart';
+import 'utils/router.dart';
 
 void main() => runApp(
       DevicePreview(
@@ -19,13 +21,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: const MainApp(),
+      routerConfig: router,
     );
   }
 }
@@ -43,6 +45,7 @@ class MainApp extends StatelessWidget {
       },
       onEnd: () {
         debugPrint("On End");
+        context.go("/login");
       },
       childWidget: Stack(
         alignment: AlignmentDirectional.center,
@@ -53,7 +56,6 @@ class MainApp extends StatelessWidget {
       ),
       onAnimationEnd: () => debugPrint("On Fade In End"),
       // nextScreen: const LoginScreen(),
-      nextScreen: HomeScreen(),
     );
   }
 }

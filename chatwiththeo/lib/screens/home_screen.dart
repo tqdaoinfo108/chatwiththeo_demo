@@ -28,21 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 20),
         SvgPicture.asset("assets/logo_mix.svg"),
         const SizedBox(height: 20),
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            HomeCard(type: 1),
-            HomeCard(type: 2),
-          ],
-        ),
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            HomeCard(type: 3),
-            HomeCard(type: 4),
-          ],
+        Flexible(
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemBuilder: (c, i) {
+                return HomeCard(type: i + 1);
+              },
+              itemCount: 4),
         )
       ],
     ),

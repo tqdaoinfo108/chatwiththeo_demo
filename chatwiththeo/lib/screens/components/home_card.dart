@@ -49,8 +49,6 @@ class HomeCard extends StatelessWidget {
     }
     // Figma Flutter Generator Rectangle6419Widget - RECTANGLE
     return Container(
-        height: (MediaQuery.of(context).size.width - 80) / 2,
-        width: (MediaQuery.of(context).size.width - 90) / 2,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
@@ -67,20 +65,18 @@ class HomeCard extends StatelessWidget {
               end: const Alignment(-1, 6.123234262925839e-17),
               colors: gradient),
         ),
-        child: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(assetImage, height: 75, fit: BoxFit.contain),
-              const SizedBox(height: 5),
-              Text(
-                title,
-                style: AppTheme.titleMedium,
-                textAlign: TextAlign.center,
-              )
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(assetImage, height: 75, fit: BoxFit.contain),
+            const SizedBox(height: 5),
+            Text(
+              title,
+              style: AppTheme.titleMedium,
+              textAlign: TextAlign.center,
+            )
+          ],
         ));
   }
 }

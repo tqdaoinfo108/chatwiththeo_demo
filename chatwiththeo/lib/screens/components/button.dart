@@ -31,7 +31,7 @@ class AppButton extends StatelessWidget {
                 shadowColor: Colors.transparent,
               ),
               child: Text(title, style: AppTheme.titleMedium),
-              onPressed: () {}),
+              onPressed: () => onPress.call()),
         ));
   }
 }
