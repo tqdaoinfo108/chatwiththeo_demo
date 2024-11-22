@@ -79,8 +79,7 @@ class AppTheme {
     ),
   );
 
-  static const TextStyle titleLarge = TextStyle(
-    fontWeight: FontWeight.bold,
+  static TextStyle titleLarge = GoogleFonts.robotoCondensed(
     color: Colors.white,
     fontSize: 24,
     letterSpacing: 0.5,
@@ -89,8 +88,8 @@ class AppTheme {
   static TextStyle titleMedium = GoogleFonts.robotoCondensed(
       color: Colors.white,
       fontSize: 16,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 0.5);
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.w300);
 
   static TextStyle bodySmall = GoogleFonts.robotoCondensed(
     color: Colors.black87,

@@ -1,4 +1,6 @@
+import 'package:chatwiththeo/screens/dashboard_screen.dart';
 import 'package:chatwiththeo/screens/home_screen.dart';
+import 'package:chatwiththeo/screens/intro_screen.dart';
 import 'package:chatwiththeo/screens/login_detail_screen.dart';
 import 'package:chatwiththeo/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (BuildContext context, GoRouterState state) {
-        return HomeScreen();
+        return const HomeScreen();
       },
     ),
     GoRoute(
@@ -30,6 +32,18 @@ final GoRouter router = GoRouter(
       path: '/login/detail',
       builder: (BuildContext context, GoRouterState state) {
         return const LoginDetailScreen();
+      },
+    ),
+    GoRoute(
+      path: '/intro',
+      builder: (BuildContext context, GoRouterState state) {
+        return const IntroScreen();
+      },
+    ),
+    GoRoute(
+      path: '/dashboard',
+      builder: (BuildContext context, GoRouterState state) {
+        return const DashboardScreen();
       },
     ),
   ],

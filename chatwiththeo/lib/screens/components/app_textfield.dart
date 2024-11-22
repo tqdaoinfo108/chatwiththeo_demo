@@ -2,21 +2,22 @@ import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class AppTextFormField extends StatelessWidget {
-  const AppTextFormField({
-    required this.textInputAction,
-    required this.titleText,
-    required this.labelText,
-    required this.keyboardType,
-    required this.controller,
-    super.key,
-    this.onChanged,
-    this.validator,
-    this.obscureText,
-    this.suffixIcon,
-    this.onEditingComplete,
-    this.autofocus,
-    this.focusNode,
-  });
+  const AppTextFormField(
+      {required this.textInputAction,
+      required this.titleText,
+      required this.labelText,
+      required this.keyboardType,
+      required this.controller,
+      super.key,
+      this.onChanged,
+      this.validator,
+      this.obscureText,
+      this.suffixIcon,
+      this.onEditingComplete,
+      this.autofocus,
+      this.focusNode,
+      this.enabled,
+      this.minLines});
 
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
@@ -29,6 +30,8 @@ class AppTextFormField extends StatelessWidget {
   final String titleText;
   final bool? autofocus;
   final FocusNode? focusNode;
+  final int? minLines;
+  final bool? enabled;
   final void Function()? onEditingComplete;
 
   @override
@@ -39,7 +42,7 @@ class AppTextFormField extends StatelessWidget {
       children: [
         Text(
           titleText,
-          style: AppTheme.titleMedium.copyWith(color: Colors.black),
+          style: AppTheme.titleMedium.copyWith(color: Colors.black54),
         ),
         const SizedBox(height: 5),
         Container(
@@ -63,13 +66,17 @@ class AppTextFormField extends StatelessWidget {
             validator: validator,
             obscureText: obscureText ?? false,
             obscuringCharacter: '*',
+            enabled: enabled,
             onEditingComplete: onEditingComplete,
+            minLines: minLines ?? 1,
+            maxLines: minLines ?? 1,
             decoration: InputDecoration(
               isDense: true,
+              suffixIcon: suffixIcon,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               fillColor: Colors.white,
-              labelText: labelText,
+              labelText: labelText == '' ? null : labelText,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.0),
                 borderSide: const BorderSide(
@@ -85,7 +92,7 @@ class AppTextFormField extends StatelessWidget {
             ),
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
             style: const TextStyle(
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),

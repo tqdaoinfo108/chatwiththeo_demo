@@ -9,11 +9,15 @@ class AppScaffold extends StatelessWidget {
       required this.titlePage,
       required this.body,
       this.bottomNavigationBar,
-      this.actions});
+      this.actions,
+      this.hidenBackButton,
+      this.hidenSearchButton});
   String titlePage;
   Widget body;
   Widget? bottomNavigationBar;
   List<Widget>? actions;
+  final bool? hidenBackButton;
+  final bool? hidenSearchButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,24 +34,29 @@ class AppScaffold extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 20),
                 AppBar(
                   backgroundColor: Colors.transparent,
                   leadingWidth: 70,
-                  leading: Container(
-                    margin: const EdgeInsets.only(left: 30),
-                    child: const Card(
-                      shape: CircleBorder(),
-                      color: AppColors.subColor,
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                  leading: (hidenBackButton ?? true)
+                      ? null
+                      : Container(
+                          margin: const EdgeInsets.only(left: 30),
+                          child: const Card(
+                            shape: CircleBorder(),
+                            color: AppColors.subColor,
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                   actions: actions,
-                  title: Text(titlePage,
-                      style: AppTheme.titleLarge
-                          .copyWith(color: AppColors.subColor)),
+                  title: (hidenBackButton ?? true)
+                      ? null
+                      : Text(titlePage,
+                          style: AppTheme.titleLarge
+                              .copyWith(color: AppColors.subColor)),
                   centerTitle: false,
                 ),
                 Expanded(
