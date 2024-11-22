@@ -18,10 +18,10 @@ class AppButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: const LinearGradient(
+            gradient:  LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: AppColors.defaultGradient,
+              colors: gradient ?? [],
             ),
           ),
           child: ElevatedButton(
@@ -30,7 +30,7 @@ class AppButton extends StatelessWidget {
                 overlayColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              child: Text(title, style: AppTheme.titleMedium),
+              child: Text(title, style: AppTheme.titleMedium.copyWith(fontWeight: FontWeight.bold)),
               onPressed: () => onPress.call()),
         ));
   }

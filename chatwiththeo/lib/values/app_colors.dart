@@ -15,7 +15,7 @@ class AppColors {
   ];
 
   static const List<Color> subDefaultGradient = [
-    subColor,
-    primaryColor,
+    Color(0xffFF7C60),
+    Color(0xff994A3A),
   ];
 }

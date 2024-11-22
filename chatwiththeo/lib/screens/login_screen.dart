@@ -32,10 +32,12 @@ class LoginScreen extends StatelessWidget {
             Image.asset("assets/cover/cover.png", fit: BoxFit.fitWidth),
             const SizedBox(height: 20),
             AppButton("Đăng nhập", () {
-              context.go("/login/detail");
+              context.push("/login/detail");
             }),
             const SizedBox(height: 10),
-            AppButton("Đăng ký", () {}, gradient: AppColors.subDefaultGradient),
+            AppButton("Đăng ký", () {
+              context.push("/login/register");
+            }, gradient: AppColors.subDefaultGradient),
             const Spacer(),
           ],
         ),

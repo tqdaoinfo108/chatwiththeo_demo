@@ -1,5 +1,4 @@
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
-import 'package:chatwiththeo/screens/login_screen.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -80,9 +79,12 @@ class LoginDetailScreen extends StatelessWidget {
                               AppTheme.titleMedium.copyWith(color: Colors.grey))
                     ],
                   ),
-                  Text("Quên mật khẩu?",
-                      style: AppTheme.titleMedium
-                          .copyWith(color: AppColors.primaryColor))
+                  InkWell(
+                    onTap: () => context.push("/login/forgetPass"),
+                    child: Text("Quên mật khẩu?",
+                        style: AppTheme.titleMedium
+                            .copyWith(color: AppColors.primaryColor)),
+                  )
                 ],
               ),
               const SizedBox(height: 30),

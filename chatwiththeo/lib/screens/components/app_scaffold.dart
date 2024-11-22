@@ -1,6 +1,8 @@
+import 'package:chatwiththeo/screens/login_detail_screen.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // ignore: must_be_immutable
 class AppScaffold extends StatelessWidget {
@@ -40,17 +42,20 @@ class AppScaffold extends StatelessWidget {
                   leadingWidth: 70,
                   leading: (hidenBackButton ?? true)
                       ? null
-                      : Container(
-                          margin: const EdgeInsets.only(left: 30),
-                          child: const Card(
-                            shape: CircleBorder(),
-                            color: AppColors.subColor,
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
+                      : InkWell(
+                        onTap: () => context.pop(),
+                        child: Container(
+                            margin: const EdgeInsets.only(left: 30),
+                            child: const Card(
+                              shape: CircleBorder(),
+                              color: AppColors.subColor,
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
+                      ),
                   actions: actions,
                   title: (hidenBackButton ?? true)
                       ? null

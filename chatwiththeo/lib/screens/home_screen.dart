@@ -236,11 +236,23 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: ListView.builder(
               itemBuilder: (c, i) {
-                return socialCardWidget();
+                return SocialCardWidget();
               },
               itemCount: 20,
             ),
           )
+        ]),
+      );
+
+  Widget profilePage() => BackgroundBody(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(height: 20),
+          Text(
+            "Hôm nay, 22-10-2024",
+            style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+          ),
+          const SizedBox(height: 10),
+         
         ]),
       );
 
@@ -268,13 +280,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(width: 10),
       ],
-      hidenBackButton: false,
+      hidenBackButton: true,
       hidenSearchButton: true,
       body: [
         homePage(context),
         bookCalendar(),
         socialPage(),
-        bookCalendar(),
+        profilePage(),
       ][currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.white,
@@ -312,8 +324,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class socialCardWidget extends StatelessWidget {
-  const socialCardWidget({
+class SocialCardWidget extends StatelessWidget {
+  const SocialCardWidget({
     super.key,
   });
 
@@ -322,49 +334,91 @@ class socialCardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-          color: const Color(0xffF4F4F4),
+          color: Colors.white,
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               spreadRadius: 1,
-              blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
+              blurRadius: 6,
+              offset: Offset.zero, // changes position of shadow
             ),
           ],
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
               color: const Color(0xff000000).withOpacity(.1), width: 1)),
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "Danvu - 20-10-2024 - 02 giờ trước",
-                      style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+      child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "Giống như một cái Cây cần phải lớn lên mỗi ngày, nếu không cái cây sẽ chết. Con Người chúng ta cũng vậy!",
+                        style: AppTheme.bodySmall
+                            .copyWith(color: Colors.black, fontSize: 16),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "Vuốt để xem câu hỏi khác hoặc nhấn nút để chọn ngẫu nhiên.",
-                      style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/favorite.svg"),
+                        const SizedBox(width: 5),
+                        const Text("245")
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              )),
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.more_horiz_outlined)),
-        ],
-      ),
+                    const SizedBox(width: 30),
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/comment.svg"),
+                        const SizedBox(width: 5),
+                        const Text("245")
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: const Color(0xffF4F4F4),
+                   
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(10.0)),
+                    border: Border.all(
+                        color: const Color(0xff000000).withOpacity(.1),
+                        width: 1)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "Danvu - 20-10-2024 - 02 giờ trước",
+                        style: AppTheme.bodySmall
+                            .copyWith(color: Colors.black54),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        "Vuốt để xem câu hỏi khác hoặc nhấn nút để chọn ngẫu nhiên.",
+                        style: AppTheme.bodySmall
+                            .copyWith(color: Colors.black54),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )),
     );
   }
 }

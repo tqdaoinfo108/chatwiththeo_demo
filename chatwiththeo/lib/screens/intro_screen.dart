@@ -213,7 +213,7 @@ class PageIndicator extends StatelessWidget {
               RawMaterialButton(
                 onPressed: () {
                   if (currentPageIndex == 2) {
-                    context.go('/login');
+                    context.push('/login');
                     return;
                   }
                   onUpdateCurrentPageIndex(currentPageIndex + 1);

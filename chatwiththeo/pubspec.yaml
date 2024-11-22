@@ -13,7 +13,6 @@ dependencies:
   flutter_svg: ^2.0.14
   card_swiper: ^3.0.1
   go_router: ^14.6.0
-  rhttp: ^0.9.1
   dots_indicator: ^2.1.1
   
   flutter:
