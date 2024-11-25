@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/rendering.dart';
 
+import 'services/app_services.dart';
 import 'utils/router.dart';
 
 void main() {
@@ -17,6 +18,7 @@ void main() {
       builder: (context) => const MyApp(), // Wrap your app
     ),
   );
+  AppServices.instance.a();
 }
 
 class MyApp extends StatelessWidget {
