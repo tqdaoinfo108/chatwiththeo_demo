@@ -1,54 +1,23 @@
-import 'package:chatwiththeo/main.dart';
+import 'package:chatwiththeo/model/categories_model.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeCard extends StatelessWidget {
-  const HomeCard({super.key, required this.type});
-  final int type;
-
+  const HomeCard({
+    super.key,
+    required this.data,
+  });
+  final CategoryModel data;
   @override
   Widget build(BuildContext context) {
-    List<Color> gradient = [];
-    var assetImage = "";
-    var title = "";
-    switch (type) {
-      case 1:
-        gradient = [
-          const Color.fromRGBO(236, 90, 90, 1),
-          const Color.fromRGBO(134, 51, 51, 1)
-        ];
-        assetImage = "assets/icon/icon1.png";
-        title = "THẤU HIỂU\nBẢN THÂN";
-        break;
-      case 2:
-        gradient = [
-          const Color.fromRGBO(109, 106, 240, 1),
-          const Color.fromRGBO(62, 61, 138, 1)
-        ];
-        assetImage = "assets/icon/icon2.png";
-        title = "QUẢN TRỊ\nBẢN THÂN";
+    List<Color> gradient = [
+      Color(int.parse("0xff${data.bGColor1}")),
+      Color(int.parse("0xff${data.bGColor2}"))
+    ];
+    var assetImage = "assets/icon/icon1.png";
+    var title = data.categoryName?.replaceAll("\\n", "\n");
 
-        break;
-      case 3:
-        gradient = [
-          const Color.fromRGBO(120, 180, 74, 1),
-          const Color.fromRGBO(52, 78, 32, 1)
-        ];
-        assetImage = "assets/icon/icon3.png";
-        title = "PHÁT TRIỂN\nMỚI QUAN HỆ";
-
-        break;
-      case 4:
-        gradient = [
-          const Color.fromRGBO(236, 150, 70, 1),
-          const Color.fromRGBO(134, 85, 39, 1)
-        ];
-        assetImage = "assets/icon/icon4.png";
-        title = "ĐẶT LỊCH\nTRÒ CHUYỆN";
-
-        break;
-    }
     // Figma Flutter Generator Rectangle6419Widget - RECTANGLE
     return InkWell(
       onTap: () => context.push("/home"),
@@ -76,8 +45,9 @@ class HomeCard extends StatelessWidget {
               Image.asset(assetImage, height: 75, fit: BoxFit.contain),
               const SizedBox(height: 5),
               Text(
-                title,
-                style: AppTheme.titleMedium,
+                title ?? "",
+                style:
+                    AppTheme.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               )
             ],

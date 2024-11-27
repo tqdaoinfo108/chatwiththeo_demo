@@ -1,3 +1,4 @@
+import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
 import 'package:chatwiththeo/screens/components/app_textfield.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
+  var dateTimeNow = DateTime.now();
 
   Widget homePage(BuildContext context) {
     return Column(
@@ -135,96 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget bookCalendar() => BackgroundBody(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              "Bạn muốn đặt lịch",
-              style: AppTheme.titleLarge
-                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Flexible(
-                  flex: 6,
-                  child: AppTextFormField(
-                    textInputAction: TextInputAction.none,
-                    titleText: "Ngày bắt đầu",
-                    labelText: '',
-                    keyboardType: TextInputType.none,
-                    controller: TextEditingController(text: "08/10/2024"),
-                    enabled: false,
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down,
-                        color: Colors.black54),
-                  ),
-                ),
-                const Spacer(),
-                Flexible(
-                  flex: 4,
-                  child: AppTextFormField(
-                    textInputAction: TextInputAction.none,
-                    titleText: "",
-                    labelText: '',
-                    keyboardType: TextInputType.none,
-                    controller: TextEditingController(text: "10:00"),
-                    enabled: false,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Flexible(
-                  flex: 6,
-                  child: AppTextFormField(
-                    textInputAction: TextInputAction.none,
-                    titleText: "Ngày kết thúc",
-                    labelText: '',
-                    keyboardType: TextInputType.none,
-                    controller: TextEditingController(text: "08/10/2024"),
-                    enabled: false,
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down,
-                        color: Colors.black54),
-                  ),
-                ),
-                const Spacer(),
-                Flexible(
-                  flex: 4,
-                  child: AppTextFormField(
-                    textInputAction: TextInputAction.none,
-                    titleText: "",
-                    labelText: '',
-                    keyboardType: TextInputType.none,
-                    controller: TextEditingController(text: "10:00"),
-                    enabled: false,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const Divider(color: Colors.black38),
-            const SizedBox(height: 10),
-            Text(
-              "Mô tả nội dung",
-              style: AppTheme.titleLarge
-                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            AppTextFormField(
-              textInputAction: TextInputAction.none,
-              titleText: "",
-              labelText: '',
-              keyboardType: TextInputType.none,
-              minLines: 4,
-              controller: TextEditingController(text: "abc"),
-            ),
-          ],
-        ),
-      );
-
   Widget socialPage() => BackgroundBody(
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const SizedBox(height: 20),
@@ -252,12 +164,105 @@ class _HomeScreenState extends State<HomeScreen> {
             style: AppTheme.bodySmall.copyWith(color: Colors.black54),
           ),
           const SizedBox(height: 10),
-         
         ]),
       );
 
   @override
   Widget build(BuildContext context) {
+    Widget bookCalendar() => BackgroundBody(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Text(
+                "Bạn muốn đặt lịch",
+                style: AppTheme.titleLarge
+                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 6,
+                    child: InkWell(
+                      onTap: () async {
+                        final result = await showBoardDateTimePicker(
+                            context: context,
+                            pickerType: DateTimePickerType.datetime,
+                            initialDate: DateTime.now(),
+                            minimumDate:
+                                dateTimeNow.add(const Duration(days: 1)),
+                            maximumDate:
+                                dateTimeNow.add(const Duration(days: 365)),
+                            options: const BoardDateTimeOptions(
+                              languages: BoardPickerLanguages(
+                                  locale: "vi",
+                                  now: "Bây giờ",
+                                  tomorrow: "Ngày mai",
+                                  yesterday: "Ngày hôm qua",
+                                  today: "Hôm nay"),
+                              startDayOfWeek: DateTime.monday,
+                              pickerFormat: PickerFormat.dmy,
+                            ),
+                            showDragHandle: true,
+                            onChanged: (v) {
+                              setState(() {
+                                dateTimeNow = v;
+                              });
+                            },
+                            enableDrag: true);
+
+                        if (result != null) {
+                          print('result: $result');
+                        }
+                      },
+                      child: AppTextFormField(
+                        textInputAction: TextInputAction.none,
+                        titleText: "Ngày bắt đầu",
+                        labelText: '',
+                        keyboardType: TextInputType.none,
+                        controller: TextEditingController(
+                            text:
+                                "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}"),
+                        enabled: false,
+                        suffixIcon: const Icon(Icons.keyboard_arrow_down,
+                            color: Colors.black54),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Flexible(
+                    flex: 4,
+                    child: AppTextFormField(
+                      textInputAction: TextInputAction.none,
+                      titleText: "",
+                      labelText: '',
+                      keyboardType: TextInputType.none,
+                      controller: TextEditingController(
+                          text: "${dateTimeNow.hour}:${dateTimeNow.minute}"),
+                      enabled: false,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Mô tả nội dung",
+                style: AppTheme.titleLarge
+                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              AppTextFormField(
+                textInputAction: TextInputAction.none,
+                titleText: "",
+                labelText: '',
+                keyboardType: TextInputType.none,
+                minLines: 4,
+                controller: TextEditingController(text: "abc"),
+              ),
+            ],
+          ),
+        );
+
     return AppScaffold(
       titlePage: "Chủ đề",
       actions: [
@@ -353,13 +358,13 @@ class SocialCardWidget extends StatelessWidget {
             children: [
               const SizedBox(height: 10),
               Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "Giống như một cái Cây cần phải lớn lên mỗi ngày, nếu không cái cây sẽ chết. Con Người chúng ta cũng vậy!",
-                        style: AppTheme.bodySmall
-                            .copyWith(color: Colors.black, fontSize: 16),
-                      ),
-                    ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  "Giống như một cái Cây cần phải lớn lên mỗi ngày, nếu không cái cây sẽ chết. Con Người chúng ta cũng vậy!",
+                  style: AppTheme.bodySmall
+                      .copyWith(color: Colors.black, fontSize: 16),
+                ),
+              ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -384,13 +389,12 @@ class SocialCardWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     color: const Color(0xffF4F4F4),
-                   
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                     border: Border.all(
                         color: const Color(0xff000000).withOpacity(.1),
                         width: 1)),
@@ -401,8 +405,8 @@ class SocialCardWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         "Danvu - 20-10-2024 - 02 giờ trước",
-                        style: AppTheme.bodySmall
-                            .copyWith(color: Colors.black54),
+                        style:
+                            AppTheme.bodySmall.copyWith(color: Colors.black54),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -410,8 +414,8 @@ class SocialCardWidget extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         "Vuốt để xem câu hỏi khác hoặc nhấn nút để chọn ngẫu nhiên.",
-                        style: AppTheme.bodySmall
-                            .copyWith(color: Colors.black54),
+                        style:
+                            AppTheme.bodySmall.copyWith(color: Colors.black54),
                       ),
                     ),
                   ],

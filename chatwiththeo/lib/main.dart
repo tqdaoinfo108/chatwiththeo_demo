@@ -1,24 +1,24 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:chatwiththeo/utils/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/rendering.dart';
-
-import 'services/app_services.dart';
+import 'screens/components/app_snackbar.dart';
 import 'utils/router.dart';
 
-void main() {
+void main() async {
   debugPaintSizeEnabled = false;
-
+  await GetStorage.init();
   runApp(
     DevicePreview(
       enabled: kIsWeb,
       builder: (context) => const MyApp(), // Wrap your app
     ),
   );
-  AppServices.instance.a();
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      locale: DevicePreview.locale(context),
+      scaffoldMessengerKey: SnackbarHelper.key,
+      locale: kIsWeb ? DevicePreview.locale(context) : const Locale("vi"),
       builder: DevicePreview.appBuilder,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
@@ -49,8 +50,20 @@ class MainApp extends StatelessWidget {
         debugPrint("On Init");
       },
       onEnd: () {
-        debugPrint("On End");
-        context.go("/intro");
+        var nextPage =
+            bool.tryParse(GetStorage().read(AppConstant.IS_INTRO).toString());
+        var isRemember = bool.tryParse(
+            GetStorage().read(AppConstant.IS_REMEMBER).toString());
+        if (isRemember != null && !isRemember) {
+          GetStorage().remove(AppConstant.USER_USER_ID);
+        }
+        var isUserID = GetStorage().read(AppConstant.IS_REMEMBER);
+        var isNextHome = isUserID != null && isUserID != 0;
+        context.go(nextPage == null || !nextPage
+            ? "/intro"
+            : isNextHome
+                ? "/dashboard"
+                : "/login");
       },
       childWidget: Stack(
         alignment: AlignmentDirectional.center,

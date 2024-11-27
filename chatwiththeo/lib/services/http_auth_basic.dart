@@ -33,6 +33,7 @@ class BasicAuthClient extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     request.headers['Authorization'] = _authString;
+    request.headers['Content-Type'] = "application/json";
 
     return _inner.send(request);
   }

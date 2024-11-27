@@ -14,7 +14,9 @@ dependencies:
   card_swiper: ^3.0.1
   go_router: ^14.6.0
   dots_indicator: ^2.1.1
-  
+  get_storage: ^2.1.1
+  board_datetime_picker: ^2.1.6
+
   flutter:
     sdk: flutter
   http: ^1.2.2

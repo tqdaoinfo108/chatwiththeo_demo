@@ -2,7 +2,10 @@ import 'package:chatwiththeo/screens/login_detail_screen.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../utils/constant.dart';
 
 // ignore: must_be_immutable
 class AppScaffold extends StatelessWidget {
@@ -43,8 +46,8 @@ class AppScaffold extends StatelessWidget {
                   leading: (hidenBackButton ?? true)
                       ? null
                       : InkWell(
-                        onTap: () => context.pop(),
-                        child: Container(
+                          onTap: () => context.pop(),
+                          child: Container(
                             margin: const EdgeInsets.only(left: 30),
                             child: const Card(
                               shape: CircleBorder(),
@@ -55,8 +58,23 @@ class AppScaffold extends StatelessWidget {
                               ),
                             ),
                           ),
-                      ),
-                  actions: actions,
+                        ),
+                  actions: [
+                    ...actions ?? [],
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.notifications,
+                          color: AppColors.subColor,
+                        )),
+                    const SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 18,
+                      child: Image.network(
+                          GetStorage().read(AppConstant.USER_IMAGEPATH)),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
                   title: (hidenBackButton ?? true)
                       ? null
                       : Text(titlePage,

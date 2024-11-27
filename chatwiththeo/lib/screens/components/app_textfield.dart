@@ -73,6 +73,7 @@ class AppTextFormField extends StatelessWidget {
             decoration: InputDecoration(
               isDense: true,
               suffixIcon: suffixIcon,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               fillColor: Colors.white,

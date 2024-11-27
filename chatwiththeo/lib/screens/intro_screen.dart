@@ -4,7 +4,10 @@ import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+
+import '../utils/constant.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -213,6 +216,7 @@ class PageIndicator extends StatelessWidget {
               RawMaterialButton(
                 onPressed: () {
                   if (currentPageIndex == 2) {
+                    GetStorage().write(AppConstant.IS_INTRO, true);
                     context.push('/login');
                     return;
                   }
