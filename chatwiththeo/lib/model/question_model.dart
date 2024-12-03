@@ -1,14 +1,17 @@
 import 'package:chatwiththeo/model/base_response.dart';
 
+import 'answer_model.dart';
+
 class QuestionModel {
   int? questionID;
   int? userID;
   String? questionContent;
   String? fullName;
   int? answerID;
-  String? dateCreated;
+  DateTime? dateCreated;
   int? numberComment;
   int? numberLike;
+  AnswerModel? answer;
 
   QuestionModel(
       {this.questionID,
@@ -21,18 +24,20 @@ class QuestionModel {
       this.numberLike});
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
+    answer =
+        json['Answer'] != null ?  AnswerModel.fromJson(json['Answer']) : null;
     questionID = json['QuestionID'];
     userID = json['UserID'];
     questionContent = json['QuestionContent'];
     fullName = json['FullName'];
     answerID = json['AnswerID'];
-    dateCreated = json['DateCreated'];
+    dateCreated = DateTime.tryParse(json['DateCreated']);
     numberComment = json['NumberComment'];
     numberLike = json['NumberLike'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['QuestionID'] = this.questionID;
     data['UserID'] = this.userID;
     data['QuestionContent'] = this.questionContent;

@@ -5,6 +5,7 @@ import 'package:chatwiththeo/utils/constant.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/answer_model.dart';
 import '../model/base_response.dart';
 import '../model/categories_model.dart';
 import '../model/question_model.dart';
@@ -40,6 +41,34 @@ class AppServices {
     try {
       var rawResponse = await _api.get(Uri.parse(
           "${_baseURL}api/question/get-question-random-by-cate?page=$page&limit=$limit&userID=${GetStorage().read(AppConstant.USER_USER_ID)}&categoryID=$categoryID"));
+      if (rawResponse.statusCode == 200) {
+        return QuestionModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<List<AnswerModel>>?> getListAnswerModel(
+      int page, int limit, int answerModelID) async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "${_baseURL}/api/user-answer-comment/get-list-comment?answerID=$answerModelID&page=$page&limit=$limit"));
+      if (rawResponse.statusCode == 200) {
+        return AnswerModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<List<QuestionModel>>?> getListQuestionAnswer(
+      int page, int limit) async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "${_baseURL}api/question/get-question-by-cate?page=$page&limit=$limit"));
       if (rawResponse.statusCode == 200) {
         return QuestionModel.getFromJson(json.decode(rawResponse.body));
       }

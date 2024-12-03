@@ -17,7 +17,7 @@ class HomeCard extends StatelessWidget {
     ];
     var assetImage = "assets/icon/icon1.png";
     var title = data.categoryName?.replaceAll("\\n", "\n");
-
+  
     // Figma Flutter Generator Rectangle6419Widget - RECTANGLE
     return InkWell(
       onTap: () => context.push("/home", extra: data.categoryID),

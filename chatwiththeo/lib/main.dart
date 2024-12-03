@@ -9,6 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/rendering.dart';
 import 'screens/components/app_snackbar.dart';
 import 'utils/router.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
+import 'utils/time_ago_custom.dart';
 
 void main() async {
   debugPaintSizeEnabled = false;
@@ -26,6 +29,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    timeago.setLocaleMessages('vi', MyCustomMessages());
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: SnackbarHelper.key,
