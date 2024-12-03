@@ -1,7 +1,6 @@
 import 'package:async/async.dart';
 import 'package:chatwiththeo/model/categories_model.dart';
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
-import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -20,7 +19,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int currentPageIndex = 0;
   List<CategoryModel> data = [];
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
   late final Future<AppState> myFuture;
 
   @override

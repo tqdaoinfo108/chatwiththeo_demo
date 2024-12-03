@@ -20,7 +20,7 @@ class HomeCard extends StatelessWidget {
 
     // Figma Flutter Generator Rectangle6419Widget - RECTANGLE
     return InkWell(
-      onTap: () => context.push("/home"),
+      onTap: () => context.push("/home", extra: data.categoryID),
       child: Container(
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(

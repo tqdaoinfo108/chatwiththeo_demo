@@ -21,7 +21,8 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (BuildContext context, GoRouterState state) {
-        return const HomeScreen();
+        final id = state.extra as int;
+        return HomeScreen(id);
       },
     ),
     GoRoute(
@@ -36,7 +37,7 @@ final GoRouter router = GoRouter(
               return const ForgetPassScreen();
             },
           ),
-           GoRoute(
+          GoRoute(
             path: 'register',
             builder: (BuildContext context, GoRouterState state) {
               return const LoginRegisterScreen();

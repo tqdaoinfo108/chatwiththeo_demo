@@ -32,6 +32,8 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
         titlePage: "Đăng nhập",
+        hidenPerson: true,
+        hidenNotify: true,
         body: Container(
           margin: const EdgeInsets.only(top: 20),
           padding: const EdgeInsets.symmetric(horizontal: 30),

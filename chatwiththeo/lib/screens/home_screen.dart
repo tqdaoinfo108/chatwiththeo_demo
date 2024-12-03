@@ -1,18 +1,23 @@
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:chatwiththeo/model/question_model.dart';
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
 import 'package:chatwiththeo/screens/components/app_textfield.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
+import '../services/app_services.dart';
+import '../utils/constant.dart';
 import 'components/body_bg.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen(this.categoryID, {super.key});
 
+  final int categoryID;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -20,121 +25,101 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
   var dateTimeNow = DateTime.now();
+  List<QuestionModel> listQuestion = [];
+  late final Future<AppState> myFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    myFuture = initData();
+  }
+
+  Future<AppState> initData() async {
+    var response =
+        await AppServices.instance.getListQuestion(1, 50, widget.categoryID);
+    if (response != null) {
+      setState(() {
+        listQuestion = response.data!;
+      });
+    } else {
+      return Future.value(AppState.ERROR);
+    }
+    return Future.value(AppState.SUCCESS);
+  }
 
   Widget homePage(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        SvgPicture.asset("assets/logo_mix.svg"),
-        const SizedBox(height: 40),
-        Container(
-          height: 60,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: Row(
+    return FutureBuilder(
+        future: null,
+        initialData: AppState.LOADING,
+        builder: (context, AsyncSnapshot<AppState> snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    "Vuốt trái phải để xem câu hỏi khác hoặc nhấn nút để chọn ngẫu nhiên.",
-                    style: AppTheme.bodySmall.copyWith(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w100,
-                        fontSize: 14),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 20),
+              SvgPicture.asset("assets/logo_mix.svg"),
+              const SizedBox(height: 40),
               Container(
-                  height: 60,
-                  width: 60,
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
+                height: 60,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.refresh_outlined,
-                    color: Colors.white,
-                  ))
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        SingleChildScrollView(
-          child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                color: Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                child: Stack(
+                child: Row(
                   children: [
-                    Positioned(
-                      bottom: -35,
-                      right: -20,
-                      child: SvgPicture.asset('assets/card_icon.svg'),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 30, horizontal: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Giống như một cái Cây cần phải lớn lên mỗi ngày, nếu không cái cây sẽ chết.Con Người chúng ta cũng vậy!",
-                            softWrap: true,
-                            style: AppTheme.titleLarge.copyWith(
-                                color: Colors.black87,
-                                fontSize: 20,
-                                letterSpacing: .5,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset("assets/favorite.svg"),
-                                  const SizedBox(width: 5),
-                                  const Text("245")
-                                ],
-                              ),
-                              const SizedBox(width: 30),
-                              Row(
-                                children: [
-                                  SvgPicture.asset("assets/comment.svg"),
-                                  const SizedBox(width: 5),
-                                  const Text("245")
-                                ],
-                              )
-                            ],
-                          )
-                        ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Text(
+                          "Vuốt trái phải để xem câu hỏi khác hoặc nhấn nút để chọn ngẫu nhiên.",
+                          style: AppTheme.bodySmall.copyWith(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w100,
+                              fontSize: 14),
+                        ),
                       ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        initData();
+                      },
+                      child: Container(
+                          height: 60,
+                          width: 60,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.refresh_outlined,
+                            color: Colors.white,
+                          )),
                     )
                   ],
                 ),
-              );
-            },
-            itemCount: 2,
-            itemWidth: MediaQuery.of(context).size.width,
-            itemHeight: 300.0,
-            layout: SwiperLayout.TINDER,
-          ),
-        )
-      ],
-    );
+              ),
+              const SizedBox(height: 20),
+              SingleChildScrollView(
+                child: Swiper(
+                  itemBuilder: (BuildContext context, int index) {
+                    return QuestionCard(listQuestion[index]);
+                  },
+                  itemCount: listQuestion.length,
+                  itemWidth: MediaQuery.of(context).size.width,
+                  itemHeight: 300.0,
+                  layout: SwiperLayout.TINDER,
+                ),
+              )
+            ],
+          );
+        });
   }
 
   Widget socialPage() => BackgroundBody(
@@ -324,6 +309,71 @@ class _HomeScreenState extends State<HomeScreen> {
             currentPageIndex = a;
           });
         },
+      ),
+    );
+  }
+}
+
+class QuestionCard extends StatelessWidget {
+  const QuestionCard(
+    this.data, {
+    super.key,
+  });
+
+  final QuestionModel data;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: -35,
+            right: -20,
+            child: SvgPicture.asset('assets/card_icon.svg'),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  data.questionContent ?? "",
+                  softWrap: true,
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.titleLarge.copyWith(
+                      color: Colors.black87,
+                      fontSize: 20,
+                      letterSpacing: .5,
+                      fontWeight: FontWeight.normal),
+                ),
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/favorite.svg"),
+                        const SizedBox(width: 5),
+                        Text(data.numberLike?.toString() ?? "")
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Row(
+                      children: [
+                        SvgPicture.asset("assets/comment.svg"),
+                        const SizedBox(width: 5),
+                        Text(data.numberComment?.toString() ?? "")
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

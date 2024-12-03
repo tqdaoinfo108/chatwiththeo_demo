@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:chatwiththeo/services/http_auth_basic.dart';
+import 'package:chatwiththeo/utils/constant.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/base_response.dart';
 import '../model/categories_model.dart';
+import '../model/question_model.dart';
 import '../model/user_model.dart';
 
 class AppServices {
@@ -25,6 +28,20 @@ class AppServices {
           "${_baseURL}api/categorys/getlistbygameid?gameID=$gameID&page=$page&limit=$limit"));
       if (rawResponse.statusCode == 200) {
         return CategoryModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<List<QuestionModel>>?> getListQuestion(
+      int page, int limit, categoryID) async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "${_baseURL}api/question/get-question-random-by-cate?page=$page&limit=$limit&userID=${GetStorage().read(AppConstant.USER_USER_ID)}&categoryID=$categoryID"));
+      if (rawResponse.statusCode == 200) {
+        return QuestionModel.getFromJson(json.decode(rawResponse.body));
       }
     } catch (e) {
       return null;

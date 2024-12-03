@@ -16,15 +16,23 @@ class AppScaffold extends StatelessWidget {
       this.bottomNavigationBar,
       this.actions,
       this.hidenBackButton,
-      this.hidenSearchButton});
+      this.hidenSearchButton,
+      this.hidenPerson,
+      this.hidenNotify});
+
   String titlePage;
   Widget body;
   Widget? bottomNavigationBar;
   List<Widget>? actions;
   final bool? hidenBackButton;
   final bool? hidenSearchButton;
+  final bool? hidenPerson;
+  final bool? hidenNotify;
+
   @override
   Widget build(BuildContext context) {
+    var image = GetStorage().read(AppConstant.USER_IMAGEPATH);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -61,18 +69,24 @@ class AppScaffold extends StatelessWidget {
                         ),
                   actions: [
                     ...actions ?? [],
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.notifications,
-                          color: AppColors.subColor,
-                        )),
+                    (hidenNotify ?? false)
+                        ? const SizedBox()
+                        : IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.notifications,
+                              color: AppColors.subColor,
+                            )),
                     const SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 18,
-                      child: Image.network(
-                          GetStorage().read(AppConstant.USER_IMAGEPATH)),
-                    ),
+                    (hidenPerson ?? false)
+                        ? const SizedBox()
+                        : CircleAvatar(
+                            radius: 18,
+                            child: (image == null || image == '')
+                                ? const Icon(Icons.person)
+                                : Image.network(GetStorage()
+                                    .read(AppConstant.USER_IMAGEPATH)),
+                          ),
                     const SizedBox(width: 10),
                   ],
                   title: (hidenBackButton ?? true)
