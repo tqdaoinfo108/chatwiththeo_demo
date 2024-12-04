@@ -8,10 +8,14 @@ class QuestionModel {
   String? questionContent;
   String? fullName;
   int? answerID;
-  DateTime? dateCreated;
   int? numberComment;
   int? numberLike;
   AnswerModel? answer;
+
+  String? answerContent;
+  String? fullname;
+  DateTime? dateShared;
+  String? dateSharedName;
 
   QuestionModel(
       {this.questionID,
@@ -19,31 +23,32 @@ class QuestionModel {
       this.questionContent,
       this.fullName,
       this.answerID,
-      this.dateCreated,
       this.numberComment,
       this.numberLike});
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
-    answer =
-        json['Answer'] != null ?  AnswerModel.fromJson(json['Answer']) : null;
+    // answer =
+    //     json['Answer'] != null ? AnswerModel.fromJson(json['Answer']) : null;
     questionID = json['QuestionID'];
     userID = json['UserID'];
     questionContent = json['QuestionContent'];
     fullName = json['FullName'];
     answerID = json['AnswerID'];
-    dateCreated = DateTime.tryParse(json['DateCreated']);
     numberComment = json['NumberComment'];
     numberLike = json['NumberLike'];
+    answerContent = json["AnswerContent"];
+    dateShared = json["DateShared"] == null ? DateTime.now() :DateTime.tryParse(json["DateShared"]);
+    dateSharedName = json["DateSharedName"];
+    fullname = json["Fullname"];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['QuestionID'] = this.questionID;
     data['UserID'] = this.userID;
     data['QuestionContent'] = this.questionContent;
     data['FullName'] = this.fullName;
     data['AnswerID'] = this.answerID;
-    data['DateCreated'] = this.dateCreated;
     data['NumberComment'] = this.numberComment;
     data['NumberLike'] = this.numberLike;
     return data;

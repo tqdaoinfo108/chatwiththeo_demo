@@ -81,6 +81,7 @@ class AppTextFormField extends StatelessWidget {
                   onEditingComplete: onEditingComplete,
                   minLines: minLines ?? 1,
                   maxLines: minLines ?? 1,
+                  textAlignVertical: TextAlignVertical.top,
                   decoration: InputDecoration(
                     isDense: true,
                     suffixIcon: suffixIcon,
@@ -89,6 +90,7 @@ class AppTextFormField extends StatelessWidget {
                         vertical: 15, horizontal: 20),
                     fillColor: Colors.white,
                     labelText: labelText == '' ? null : labelText,
+                    
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
                       borderSide: const BorderSide(

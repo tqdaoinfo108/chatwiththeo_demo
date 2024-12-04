@@ -19,6 +19,11 @@ class AppServices {
     _api = BasicAuthClient("username", "password");
   }
 
+  static Map get getAuth => {
+        "UserID": GetStorage().read(AppConstant.USER_USER_ID),
+        "UUSerID": GetStorage().read(AppConstant.USER_USERNAME)
+      };
+
   static final AppServices _instance = AppServices._privateConstructor();
 
   static AppServices get instance => _instance;
@@ -69,7 +74,7 @@ class AppServices {
       int page, int limit) async {
     try {
       var rawResponse = await _api.get(Uri.parse(
-          "${_baseURL}api/question/get-question-by-cate?page=$page&limit=$limit"));
+          "${_baseURL}api/answer/get-answer-share?keySearch=&page=$page&limit=$limit"));
       if (rawResponse.statusCode == 200) {
         return QuestionModel.getFromJson(json.decode(rawResponse.body));
       }
@@ -133,5 +138,49 @@ class AppServices {
       return null;
     }
     return null;
+  }
+
+  Future<bool> postInsertSchedule(String description, DateTime time) async {
+    try {
+      var data = json.encode({
+        "auth": getAuth,
+        "data": {
+          "UserID": GetStorage().read(AppConstant.USER_USER_ID),
+          "DateSchedule": time.toIso8601String(),
+          "Status": 1,
+          "Description": description
+        }
+      });
+      var rawResponse = await _api
+          .post(Uri.parse("$_baseURL/api/schedule/insert-schdule"), body: data);
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+   Future<bool> postComment(int questionID , String answerContent) async {
+    try {
+      var data = json.encode({
+        "auth": getAuth,
+        "data": {
+          "QuestionID": questionID,
+          "AnswerContent": answerContent
+        }
+      });
+      var rawResponse = await _api
+          .post(Uri.parse("$_baseURL/api/answer/insert-answer"), body: data);
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
   }
 }

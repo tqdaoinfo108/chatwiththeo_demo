@@ -2,6 +2,7 @@ import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:chatwiththeo/model/question_model.dart';
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
+import 'package:chatwiththeo/screens/components/app_snackbar.dart';
 import 'package:chatwiththeo/screens/components/app_textfield.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
@@ -14,6 +15,7 @@ import '../model/base_response.dart';
 import '../services/app_services.dart';
 import '../utils/constant.dart';
 import 'components/body_bg.dart';
+import 'components/button.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
-  var dateTimeNow = DateTime.now();
+  var dateTimeNow = DateTime.now().add(const Duration(hours: 1));
   List<QuestionModel> listQuestion = [];
   List<QuestionModel> listQuestionAnswer = [];
 
@@ -38,6 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     myFuture = initData();
     myFuturesocial = initDataSocial();
+    dateController.text =
+        "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}";
+    timeController.text = "${dateTimeNow.hour}:${dateTimeNow.minute}";
   }
 
   Future<AppState> initDataSocial() async {
@@ -164,9 +169,29 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 10),
         ]),
       );
+  final dateController = TextEditingController();
+  final desciptionController = TextEditingController();
+  final timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    postCalendar() async {
+      var result = await AppServices.instance
+          .postInsertSchedule(desciptionController.text, dateTimeNow);
+      if (result) {
+        SnackbarHelper.showSnackBar("Tạo thành công!");
+        setState(() {
+          dateTimeNow = DateTime.now().add(const Duration(hours: 1));
+          dateController.text =
+              "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}";
+          timeController.text = "${dateTimeNow.hour}:${dateTimeNow.minute}";
+          desciptionController.text = '';
+        });
+      } else {
+        SnackbarHelper.showSnackBar("Tạo thất bại!");
+      }
+    }
+
     Widget bookCalendar() => BackgroundBody(
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             pickerType: DateTimePickerType.datetime,
                             initialDate: DateTime.now(),
                             minimumDate:
-                                dateTimeNow.add(const Duration(days: 1)),
+                                dateTimeNow.add(const Duration(hours: 1)),
                             maximumDate:
                                 dateTimeNow.add(const Duration(days: 365)),
                             options: const BoardDateTimeOptions(
@@ -211,7 +236,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             enableDrag: true);
 
                         if (result != null) {
-                          print('result: $result');
+                          setState(() {
+                            dateTimeNow = result;
+                          });
                         }
                       },
                       child: AppTextFormField(
@@ -219,9 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         titleText: "Ngày bắt đầu",
                         labelText: '',
                         keyboardType: TextInputType.none,
-                        controller: TextEditingController(
-                            text:
-                                "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}"),
+                        controller: dateController,
                         enabled: false,
                         suffixIcon: const Icon(Icons.keyboard_arrow_down,
                             color: Colors.black54),
@@ -236,8 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       titleText: "",
                       labelText: '',
                       keyboardType: TextInputType.none,
-                      controller: TextEditingController(
-                          text: "${dateTimeNow.hour}:${dateTimeNow.minute}"),
+                      controller: timeController,
                       enabled: false,
                     ),
                   ),
@@ -255,8 +279,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 labelText: '',
                 keyboardType: TextInputType.none,
                 minLines: 4,
-                controller: TextEditingController(text: "abc"),
+                controller: desciptionController,
               ),
+              const SizedBox(height: 20),
+              AppButton("Xác nhận", () async {
+                if (desciptionController.text.length < 20) {
+                  SnackbarHelper.showSnackBar("Nội dung ít nhất 20 ký tự");
+                } else {
+                  await postCalendar();
+                }
+              }),
             ],
           ),
         );
@@ -308,26 +340,86 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class QuestionCard extends StatelessWidget {
+class QuestionCard extends StatefulWidget {
   const QuestionCard(
     this.data, {
     super.key,
   });
 
   final QuestionModel data;
+
+  @override
+  State<QuestionCard> createState() => _QuestionCardState();
+}
+
+class _QuestionCardState extends State<QuestionCard> {
+  var commentController = TextEditingController();
+
+  postComment() async {
+    var result = await AppServices.instance
+        .postComment(widget.data.questionID!, commentController.text);
+    if (result) {
+      commentController.text = '';
+      SnackbarHelper.showSnackBar("Trả lời thành công");
+    } else {
+      SnackbarHelper.showSnackBar("Trả lời thất bại");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void showFullScreenDialog(BuildContext context) async {
-      Navigator.of(context).push(MaterialPageRoute<void>(
-        fullscreenDialog: true,
-        builder: (BuildContext context) {
-          return CardDetailPopup(data: data);
-        },
-      ));
+    // void showFullScreenDialog(BuildContext context) async {
+    //   Navigator.of(context).push(MaterialPageRoute<void>(
+    //     fullscreenDialog: true,
+    //     builder: (BuildContext context) {
+    //       return CardDetailPopup(data: data);
+    //     },
+    //   ));
+    // }
+
+    showComment() async {
+      showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 2.7,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      AppTextFormField(
+                        textInputAction: TextInputAction.none,
+                        titleText: "",
+                        labelText:
+                            'Câu trả lời của bạn mỗi ngày và không thể xoá',
+                        keyboardType: TextInputType.multiline,
+                        controller: commentController,
+                        enabled: true,
+                        minLines: 5,
+                      ),
+                      const SizedBox(height: 20),
+                      AppButton("Xác nhận", () async {
+                        if (commentController.text.isNotEmpty) {
+                          await postComment();
+                        }
+                      }, gradient: AppColors.defaultGradient),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
     }
 
     return InkWell(
-      onTap: () => showFullScreenDialog(context),
+      onTap: () => showComment(),
       child: Card(
         color: Colors.white,
         shape: const RoundedRectangleBorder(
@@ -346,7 +438,7 @@ class QuestionCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.questionContent ?? "",
+                    widget.data.questionContent ?? "",
                     softWrap: true,
                     maxLines: 6,
                     overflow: TextOverflow.ellipsis,
@@ -362,7 +454,7 @@ class QuestionCard extends StatelessWidget {
                         children: [
                           SvgPicture.asset("assets/favorite.svg"),
                           const SizedBox(width: 5),
-                          Text(data.numberLike?.toString() ?? "")
+                          Text(widget.data.numberLike?.toString() ?? "")
                         ],
                       ),
                       const SizedBox(width: 30),
@@ -370,7 +462,7 @@ class QuestionCard extends StatelessWidget {
                         children: [
                           SvgPicture.asset("assets/comment.svg"),
                           const SizedBox(width: 5),
-                          Text(data.numberComment?.toString() ?? "")
+                          Text(widget.data.numberComment?.toString() ?? "")
                         ],
                       )
                     ],
@@ -574,15 +666,15 @@ class SocialCardWidget extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    Text(
-                      timeago
-                          .format(data.answer?.dateCreated ?? DateTime.now()),
-                      style: AppTheme.bodySmall.copyWith(color: Colors.black54),
-                    ),
+                    // Text(
+                    //   timeago
+                    //       .format(data.answer?.dateCreated ?? DateTime.now()),
+                    //   style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+                    // ),
                   ],
                 ),
               ),
-              data.answer == null
+              (data.answerContent == null || data.answerContent == '')
                   ? const SizedBox(height: 10)
                   : Container(
                       margin: const EdgeInsets.symmetric(
@@ -601,7 +693,7 @@ class SocialCardWidget extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
-                              "${data.answer?.userCreated ?? ''} - ${timeago.format(data.answer?.dateCreated ?? DateTime.now())}",
+                              "${data.fullname ?? ''} - ${data.dateSharedName}",
                               style: AppTheme.bodySmall
                                   .copyWith(color: Colors.black54),
                             ),
@@ -610,7 +702,7 @@ class SocialCardWidget extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
-                              data.answer?.answerContent ?? '',
+                              data.answerContent ?? '',
                               style: AppTheme.bodySmall
                                   .copyWith(color: Colors.black54),
                             ),
