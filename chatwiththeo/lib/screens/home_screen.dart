@@ -406,7 +406,8 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
   }
 
   initDate() async {
-    var listCmt = await AppServices.instance.getListAnswerModel(1, 10, widget.data.questionID!);
+    var listCmt = await AppServices.instance
+        .getListAnswerModel(1, 10, widget.data.questionID!);
     if (listCmt != null) {
       setState(() {
         lstData = listCmt.data ?? [];
@@ -419,12 +420,12 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
     var size = MediaQuery.of(context).size;
     return AppScaffold(
       hidenPerson: true,
-      hidenBackButton: true,
+      hidenBackButton: false,
       hidenNotify: true,
       titlePage: '',
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: size.width-40),
+          constraints: BoxConstraints(minWidth: size.width - 40),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -435,8 +436,8 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: Text(
                       widget.data.questionContent ?? '',
                       style: AppTheme.titleLarge.copyWith(
@@ -449,8 +450,7 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
                 ),
                 const SizedBox(height: 20),
                 Container(
-          constraints: BoxConstraints(minWidth: size.width-40),
-
+                  constraints: BoxConstraints(minWidth: size.width - 40),
                   child: Center(
                     child: Card(
                         color: Colors.white,
@@ -461,8 +461,8 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
                           children: [
                             for (var item in lstData)
                               Container(
-          constraints: BoxConstraints(minWidth: size.width-40),
-
+                                  constraints:
+                                      BoxConstraints(minWidth: size.width - 40),
                                   margin: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 20),
                                   padding: const EdgeInsets.all(10),
@@ -471,11 +471,12 @@ class _CardDetailPopupState extends State<CardDetailPopup> {
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10.0)),
                                       border: Border.all(
-                                          color:
-                                              const Color(0xff000000).withOpacity(.1),
+                                          color: const Color(0xff000000)
+                                              .withOpacity(.1),
                                           width: 1)),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(

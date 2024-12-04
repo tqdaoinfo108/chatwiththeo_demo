@@ -76,6 +76,7 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
                     titleText: "Chìa khóa của tôi",
                     labelText: "Nhập mật khẩu của bạn",
                     focusNode: passwordFocusNode,
+                    obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     validator: (value) {

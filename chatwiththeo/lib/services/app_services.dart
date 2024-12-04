@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chatwiththeo/model/position_model.dart';
 import 'package:chatwiththeo/services/http_auth_basic.dart';
 import 'package:chatwiththeo/utils/constant.dart';
 import 'package:get_storage/get_storage.dart';
@@ -13,7 +14,7 @@ import '../model/user_model.dart';
 
 class AppServices {
   late http.Client _api;
-  static String _baseURL = "http://apichatwiththeo.gvbsoft.vn/";
+  static const String _baseURL = "http://apichatwiththeo.gvbsoft.vn/";
   AppServices._privateConstructor() {
     _api = BasicAuthClient("username", "password");
   }
@@ -54,7 +55,7 @@ class AppServices {
       int page, int limit, int answerModelID) async {
     try {
       var rawResponse = await _api.get(Uri.parse(
-          "${_baseURL}/api/user-answer-comment/get-list-comment?answerID=$answerModelID&page=$page&limit=$limit"));
+          "$_baseURL/api/user-answer-comment/get-list-comment?answerID=$answerModelID&page=$page&limit=$limit"));
       if (rawResponse.statusCode == 200) {
         return AnswerModel.getFromJson(json.decode(rawResponse.body));
       }
@@ -86,6 +87,47 @@ class AppServices {
           await _api.post(Uri.parse("${_baseURL}api/user/login"), body: data);
       if (rawResponse.statusCode == 200) {
         return UserModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<UserModel>?> letRegister(String email, String passWord,
+      String phone, String fullName, int positionID) async {
+    try {
+      var data = json.encode({
+        "ImagePath": "",
+        "PositionID": positionID,
+        "UserName": email,
+        "PassWord": passWord,
+        "FullName": fullName,
+        "Email": email,
+        "Address": "",
+        "Phone": phone,
+        "StatusID": 1,
+        "NumberLogin": 0,
+        "LastLogin": DateTime.now().toString()
+      });
+      var rawResponse = await _api
+          .post(Uri.parse("${_baseURL}api/user/register"), body: data);
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return UserModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<List<PositionModel>>?> getListPosition() async {
+    try {
+      var rawResponse = await _api
+          .get(Uri.parse("$_baseURL/api/positions/getlistpositionall"));
+      if (rawResponse.statusCode == 200) {
+        return PositionModel.getFromJson(json.decode(rawResponse.body));
       }
     } catch (e) {
       return null;

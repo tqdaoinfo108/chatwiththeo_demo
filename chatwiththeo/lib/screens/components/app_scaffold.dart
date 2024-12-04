@@ -1,4 +1,3 @@
-import 'package:chatwiththeo/screens/login_detail_screen.dart';
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +41,7 @@ class AppScaffold extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-            bottom: false,
+            bottom: true,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,12 +79,18 @@ class AppScaffold extends StatelessWidget {
                     const SizedBox(width: 10),
                     (hidenPerson ?? false)
                         ? const SizedBox()
-                        : CircleAvatar(
-                            radius: 18,
-                            child: (image == null || image == '')
-                                ? const Icon(Icons.person)
-                                : Image.network(GetStorage()
-                                    .read(AppConstant.USER_IMAGEPATH)),
+                        : InkWell(
+                            onTap: () {
+                              context.go("/login");
+                              GetStorage().erase();
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              child: (image == null || image == '')
+                                  ? const Icon(Icons.person)
+                                  : Image.network(GetStorage()
+                                      .read(AppConstant.USER_IMAGEPATH)),
+                            ),
                           ),
                     const SizedBox(width: 10),
                   ],
