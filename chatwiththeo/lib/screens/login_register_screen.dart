@@ -3,6 +3,7 @@ import 'package:chatwiththeo/services/app_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 import '../utils/constant.dart';
 import '../utils/function.dart';
@@ -46,6 +47,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+        contextSecond: context,
         titlePage: "Đăng ký",
         hidenBackButton: false,
         hidenNotify: true,
@@ -167,9 +169,9 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
                         // ignore: use_build_context_synchronously
                         this.context.go("/dashboard");
                         SnackbarHelper.showSnackBar("Đăng nhập thành công",
-                            isError: false);
+                            ToastificationType.error);
                       } else {
-                        SnackbarHelper.showSnackBar("Lỗi !!!", isError: true);
+                        SnackbarHelper.showSnackBar("Lỗi !!!", ToastificationType.error);
                       }
                     }
                   }, gradient: AppColors.defaultGradient),

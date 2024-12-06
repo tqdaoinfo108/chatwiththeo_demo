@@ -22,7 +22,7 @@ class AppTextFormField extends StatelessWidget {
       this.useTextField,
       this.initData,
       this.lisData,
-      this.onChangedFormSelect});
+      this.onChangedFormSelect, this.prefixIcon});
 
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
@@ -42,7 +42,7 @@ class AppTextFormField extends StatelessWidget {
   final PositionModel? initData;
   final List<PositionModel>? lisData;
   final void Function(PositionModel)? onChangedFormSelect;
-
+  final Widget? prefixIcon;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,7 +82,9 @@ class AppTextFormField extends StatelessWidget {
                   minLines: minLines ?? 1,
                   maxLines: minLines ?? 1,
                   textAlignVertical: TextAlignVertical.top,
+                  
                   decoration: InputDecoration(
+                    hintMaxLines: 5,
                     isDense: true,
                     suffixIcon: suffixIcon,
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -90,7 +92,7 @@ class AppTextFormField extends StatelessWidget {
                         vertical: 15, horizontal: 20),
                     fillColor: Colors.white,
                     labelText: labelText == '' ? null : labelText,
-                    
+                    suffix: prefixIcon,
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
                       borderSide: const BorderSide(

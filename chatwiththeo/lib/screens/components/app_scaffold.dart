@@ -17,7 +17,9 @@ class AppScaffold extends StatelessWidget {
       this.hidenBackButton,
       this.hidenSearchButton,
       this.hidenPerson,
-      this.hidenNotify});
+      this.hidenNotify,
+      required this.contextSecond,
+      this.onBack});
 
   String titlePage;
   Widget body;
@@ -27,7 +29,8 @@ class AppScaffold extends StatelessWidget {
   final bool? hidenSearchButton;
   final bool? hidenPerson;
   final bool? hidenNotify;
-
+  final BuildContext contextSecond;
+  final Function()? onBack;
   @override
   Widget build(BuildContext context) {
     var image = GetStorage().read(AppConstant.USER_IMAGEPATH);
@@ -53,7 +56,7 @@ class AppScaffold extends StatelessWidget {
                   leading: (hidenBackButton ?? true)
                       ? null
                       : InkWell(
-                          onTap: () => context.go("/dashboard"),
+                          onTap: onBack ?? () => contextSecond.pop(),
                           child: Container(
                             margin: const EdgeInsets.only(left: 30),
                             child: const Card(
@@ -71,7 +74,9 @@ class AppScaffold extends StatelessWidget {
                     (hidenNotify ?? false)
                         ? const SizedBox()
                         : IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.push("/notification");
+                            },
                             icon: const Icon(
                               Icons.notifications,
                               color: AppColors.subColor,

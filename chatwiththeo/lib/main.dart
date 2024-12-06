@@ -7,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/rendering.dart';
+import 'package:toastification/toastification.dart';
+import 'model/question_model.dart';
 import 'screens/components/app_snackbar.dart';
 import 'utils/router.dart';
 
@@ -26,14 +28,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: SnackbarHelper.key,
-      locale: kIsWeb ? DevicePreview.locale(context) : const Locale("vi"),
-      builder: DevicePreview.appBuilder,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      routerConfig: router,
+    return ToastificationWrapper(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        scaffoldMessengerKey: SnackbarHelper.key,
+        locale: kIsWeb ? DevicePreview.locale(context) : const Locale("vi"),
+        builder: DevicePreview.appBuilder,
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        routerConfig: router,
+      ),
     );
   }
 }
@@ -59,7 +63,9 @@ class MainApp extends StatelessWidget {
         }
         var isUserID = GetStorage().read(AppConstant.IS_REMEMBER);
         var isNextHome = isUserID != null && isUserID != 0;
-        context.go(nextPage == null || !nextPage
+
+       var questionExist =  GetStorage().read(AppConstant.QUESTION_ID);
+        context.go( questionExist != null ? "/question_detail" : nextPage == null || !nextPage
             ? "/intro"
             : isNextHome
                 ? "/dashboard"

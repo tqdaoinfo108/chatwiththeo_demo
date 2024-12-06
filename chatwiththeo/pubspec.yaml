@@ -17,7 +17,8 @@ dependencies:
   get_storage: ^2.1.1
   board_datetime_picker: ^2.1.6
   timeago: ^3.7.0
-  
+  toastification: ^2.3.0
+
   flutter:
     sdk: flutter
   http: ^1.2.2

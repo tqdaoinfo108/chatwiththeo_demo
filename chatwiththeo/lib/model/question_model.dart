@@ -15,6 +15,7 @@ class QuestionModel {
   String? answerContent;
   String? fullname;
   DateTime? dateShared;
+  String? dateAnswerName;
   String? dateSharedName;
 
   QuestionModel(
@@ -41,7 +42,8 @@ class QuestionModel {
         ? DateTime.now()
         : DateTime.tryParse(json["DateShared"]);
     dateSharedName = json["DateSharedName"];
-    fullname = json["Fullname"];
+    dateAnswerName = json["DateAnswerName"];
+    fullname = json["FullName"];
     userUpdated = json["UserUpdated"];
   }
 

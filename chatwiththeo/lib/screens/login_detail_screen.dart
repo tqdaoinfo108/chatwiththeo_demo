@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 import '../utils/function.dart';
 import 'components/app_snackbar.dart';
@@ -31,6 +32,7 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      contextSecond: context,
         titlePage: "Đăng nhập",
         hidenPerson: true,
         hidenNotify: true,
@@ -140,7 +142,7 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
                       } else {
                         SnackbarHelper.showSnackBar(
                             "Email hoặc mật khẩu không đúng",
-                            isError: true);
+                            ToastificationType.error);
                       }
                     }
                   }),

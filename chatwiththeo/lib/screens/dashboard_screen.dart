@@ -73,6 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               : snapshot.data == AppState.SUCCESS
                   ? AppScaffold(
+                      contextSecond: context,
                       titlePage: "Chủ đề",
                       body: homePage,
                       hidenBackButton: true,

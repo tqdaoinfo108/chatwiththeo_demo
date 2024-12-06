@@ -5,11 +5,14 @@ import 'package:chatwiththeo/screens/home_screen.dart';
 import 'package:chatwiththeo/screens/intro_screen.dart';
 import 'package:chatwiththeo/screens/login_detail_screen.dart';
 import 'package:chatwiththeo/screens/login_screen.dart';
+import 'package:chatwiththeo/utils/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../main.dart';
 import '../screens/login_register_screen.dart';
+import '../screens/notification_screen.dart';
 import '../screens/question_detail_screen.dart';
 
 final GoRouter router = GoRouter(
@@ -67,8 +70,15 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/question_detail',
       builder: (BuildContext context, GoRouterState state) {
-        final model = state.extra as QuestionModel;
+        var model =
+            QuestionModel.fromJson(GetStorage().read(AppConstant.QUESTION_ID));
         return QuestionDetailScreen(data: model);
+      },
+    ),
+    GoRoute(
+      path: '/notification',
+      builder: (BuildContext context, GoRouterState state) {
+        return const NotificationScreen();
       },
     ),
   ],

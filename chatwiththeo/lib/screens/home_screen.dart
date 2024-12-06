@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 import '../model/user_model.dart';
 import '../services/app_services.dart';
@@ -76,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<AppState> initData() async {
     var response =
-        await AppServices.instance.getListQuestion(1, 50, widget.categoryID);
+        await AppServices.instance.getListQuestion(1, 5, widget.categoryID);
     if (response != null) {
       setState(() {
         listQuestion = response.data!;
@@ -124,8 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                        initData();
+                      onTap: () async {
+                        var a = await initData();
+                        if (a == AppState.SUCCESS) {
+                          SnackbarHelper.showSnackBar(
+                              "Làm mới thành công", ToastificationType.success);
+                        } else {
+                          SnackbarHelper.showSnackBar(
+                              "Làm mới thất bại", ToastificationType.error);
+                        }
                       },
                       child: Container(
                           height: 60,
@@ -262,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
       var result = await AppServices.instance
           .postInsertSchedule(desciptionController.text, dateTimeNow);
       if (result) {
-        SnackbarHelper.showSnackBar("Tạo thành công!");
+        SnackbarHelper.showSnackBar(
+            "Tạo thành công!", ToastificationType.success);
         setState(() {
           dateTimeNow = DateTime.now().add(const Duration(hours: 1));
           dateController.text =
@@ -271,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
           desciptionController.text = '';
         });
       } else {
-        SnackbarHelper.showSnackBar("Tạo thất bại!");
+        SnackbarHelper.showSnackBar("Tạo thất bại!", ToastificationType.error);
       }
     }
 
@@ -367,7 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               AppButton("Xác nhận", () async {
                 if (desciptionController.text.length < 20) {
-                  SnackbarHelper.showSnackBar("Nội dung ít nhất 20 ký tự");
+                  SnackbarHelper.showSnackBar(
+                      "Nội dung ít nhất 20 ký tự", ToastificationType.info);
                 } else {
                   await postCalendar();
                 }
@@ -377,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
 
     return AppScaffold(
+      contextSecond: context,
       titlePage: "Chủ đề",
       hidenBackButton: false,
       hidenSearchButton: true,
@@ -443,10 +454,11 @@ class _QuestionCardState extends State<QuestionCard> {
         .postComment(widget.data.questionID!, commentController.text);
     if (result) {
       commentController.text = '';
-      SnackbarHelper.showSnackBar("Trả lời thành công");
+      SnackbarHelper.showSnackBar(
+          "Trả lời thành công", ToastificationType.success);
       return true;
     } else {
-      SnackbarHelper.showSnackBar("Trả lời thất bại");
+      SnackbarHelper.showSnackBar("Trả lời thất bại", ToastificationType.error);
       return false;
     }
   }
@@ -487,8 +499,8 @@ class _QuestionCardState extends State<QuestionCard> {
                           var result = await _postComment();
                           if (result) {
                             // ignore: use_build_context_synchronously
-                            GetStorage().write(AppConstant.QUESTION_ID,
-                                widget.data.questionID);
+                            await GetStorage()
+                                .write(AppConstant.QUESTION_ID, widget.data.toJson());
                             context.go("/question_detail", extra: widget.data);
                           }
                         }
@@ -656,7 +668,7 @@ class SocialCardWidget extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
                               data.answerContent ?? '',
                               style: AppTheme.bodySmall

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../model/base_response.dart';
 import '../model/categories_model.dart';
 import '../model/question_model.dart';
+import '../model/schedule_model.dart';
 import '../model/user_model.dart';
 
 class AppServices {
@@ -44,7 +45,7 @@ class AppServices {
       int page, int limit, categoryID) async {
     try {
       var rawResponse = await _api.get(Uri.parse(
-          "${_baseURL}api/question/get-question-random-by-cate?page=$page&limit=$limit&userID=${GetStorage().read(AppConstant.USER_USER_ID)}&categoryID=$categoryID"));
+          "$_baseURL/api/question/get-question-random-by-cate?page=$page&limit=$limit&userID=${GetStorage().read(AppConstant.USER_USER_ID)}&categoryID=$categoryID"));
       if (rawResponse.statusCode == 200) {
         return QuestionModel.getFromJson(json.decode(rawResponse.body));
       }
@@ -158,6 +159,20 @@ class AppServices {
           .get(Uri.parse("$_baseURL/api/positions/getlistpositionall"));
       if (rawResponse.statusCode == 200) {
         return PositionModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<List<ScheduleModel>>?> getListSchedule(
+      int page, int limit) async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "$_baseURL/api/schedule/get-list-paging?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&page=$page&limit=$limit"));
+      if (rawResponse.statusCode == 200) {
+        return ScheduleModel.getFromJson(json.decode(rawResponse.body));
       }
     } catch (e) {
       return null;

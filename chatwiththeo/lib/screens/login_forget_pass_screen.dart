@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../values/app_colors.dart';
-import '../values/app_theme.dart';
 import 'components/app_scaffold.dart';
 import 'components/app_textfield.dart';
 import 'components/button.dart';
@@ -14,6 +13,7 @@ class ForgetPassScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      contextSecond: context,
         titlePage: "Đăng nhập",
         body: Container(
           margin: const EdgeInsets.only(top: 20),
