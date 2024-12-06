@@ -86,8 +86,9 @@ class AppServices {
   Future<ResponseBase<List<QuestionModel>>?> getListAnswerByQuestionID(
       int questionID, int page, int limit) async {
     try {
+      var userID = await GetStorage().read(AppConstant.USER_USER_ID);
       var rawResponse = await _api.get(Uri.parse(
-          "${_baseURL}api/answer/get-answer-by-questionid?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&questionID=$questionID&page=$page&limit=$limit"));
+          "${_baseURL}api/answer/get-answer-by-questionid?userID=$userID&questionID=$questionID&page=$page&limit=$limit"));
       if (rawResponse.statusCode == 200) {
         return QuestionModel.getFromJson(json.decode(rawResponse.body));
       }

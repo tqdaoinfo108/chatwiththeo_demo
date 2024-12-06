@@ -60,16 +60,21 @@ class MainApp extends StatelessWidget {
             GetStorage().read(AppConstant.IS_REMEMBER).toString());
         if (isRemember != null && !isRemember) {
           GetStorage().remove(AppConstant.USER_USER_ID);
+          GetStorage().remove(AppConstant.QUESTION_ID);
         }
         var isUserID = GetStorage().read(AppConstant.IS_REMEMBER);
         var isNextHome = isUserID != null && isUserID != 0;
 
-       var questionExist =  GetStorage().read(AppConstant.QUESTION_ID);
-        context.go( questionExist != null ? "/question_detail" : nextPage == null || !nextPage
+        var questionExist = GetStorage().read(AppConstant.QUESTION_ID);
+        context.go(nextPage == null || !nextPage
             ? "/intro"
-            : isNextHome
-                ? "/dashboard"
-                : "/login");
+            : questionExist != null
+                ? "/question_detail"
+                : questionExist != null
+                    ? "/question_detail"
+                    : isNextHome
+                        ? "/dashboard"
+                        : "/login");
       },
       childWidget: Stack(
         alignment: AlignmentDirectional.center,
