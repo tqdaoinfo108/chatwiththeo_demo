@@ -53,7 +53,7 @@ class AppScaffold extends StatelessWidget {
                   leading: (hidenBackButton ?? true)
                       ? null
                       : InkWell(
-                          onTap: () => context.pop(),
+                          onTap: () => context.go("/dashboard"),
                           child: Container(
                             margin: const EdgeInsets.only(left: 30),
                             child: const Card(

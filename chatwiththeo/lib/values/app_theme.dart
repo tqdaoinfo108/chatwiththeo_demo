@@ -86,10 +86,12 @@ class AppTheme {
   );
 
   static TextStyle titleMedium = GoogleFonts.robotoCondensed(
-      color: Colors.white,
-      fontSize: 16,
-      letterSpacing: 0.5);
+      color: Colors.white, fontSize: 16, letterSpacing: 0.5);
 
+  static TextStyle titleMedium18 = GoogleFonts.robotoCondensed(
+      color: Colors.black, fontSize: 18, letterSpacing: 0.5);
+  static TextStyle titleMedium20 = GoogleFonts.robotoCondensed(
+      color: Colors.black, fontSize: 20, letterSpacing: 0.5);
   static TextStyle bodySmall = GoogleFonts.robotoCondensed(
     color: Colors.black87,
     fontSize: 14,

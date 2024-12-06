@@ -8,4 +8,5 @@ class AppConstant {
   static const USER_IMAGEPATH = "USER_IMAGEPATH";
   static const USER_USER_ID = "USER_ID";
   static const IS_INTRO = "IS_INTRO";
+  static const QUESTION_ID = "QUESTION_ID";
 }

@@ -1,3 +1,4 @@
+import 'package:chatwiththeo/model/question_model.dart';
 import 'package:chatwiththeo/screens/dashboard_screen.dart';
 import 'package:chatwiththeo/screens/login_forget_pass_screen.dart';
 import 'package:chatwiththeo/screens/home_screen.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 import '../main.dart';
 import '../screens/login_register_screen.dart';
+import '../screens/question_detail_screen.dart';
 
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
@@ -60,6 +62,13 @@ final GoRouter router = GoRouter(
       path: '/dashboard',
       builder: (BuildContext context, GoRouterState state) {
         return const DashboardScreen();
+      },
+    ),
+    GoRoute(
+      path: '/question_detail',
+      builder: (BuildContext context, GoRouterState state) {
+        final model = state.extra as QuestionModel;
+        return QuestionDetailScreen(data: model);
       },
     ),
   ],

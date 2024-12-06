@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BackgroundBody extends StatelessWidget {
-  const BackgroundBody({super.key, required this.body});
+  const BackgroundBody({super.key, required this.body, this.paddingHorizontal});
   final Widget body;
+  final double? paddingHorizontal;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal ?? 30),
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [

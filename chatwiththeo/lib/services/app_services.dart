@@ -5,8 +5,6 @@ import 'package:chatwiththeo/services/http_auth_basic.dart';
 import 'package:chatwiththeo/utils/constant.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-
-import '../model/answer_model.dart';
 import '../model/base_response.dart';
 import '../model/categories_model.dart';
 import '../model/question_model.dart';
@@ -56,19 +54,19 @@ class AppServices {
     return null;
   }
 
-  Future<ResponseBase<List<AnswerModel>>?> getListAnswerModel(
-      int page, int limit, int answerModelID) async {
-    try {
-      var rawResponse = await _api.get(Uri.parse(
-          "$_baseURL/api/user-answer-comment/get-list-comment?answerID=$answerModelID&page=$page&limit=$limit"));
-      if (rawResponse.statusCode == 200) {
-        return AnswerModel.getFromJson(json.decode(rawResponse.body));
-      }
-    } catch (e) {
-      return null;
-    }
-    return null;
-  }
+  // Future<ResponseBase<List<AnswerModel>>?> getListAnswerModel(
+  //     int page, int limit, int answerModelID) async {
+  //   try {
+  //     var rawResponse = await _api.get(Uri.parse(
+  //         "$_baseURL/api/user-answer-comment/get-list-comment?answerID=$answerModelID&page=$page&limit=$limit"));
+  //     if (rawResponse.statusCode == 200) {
+  //       return AnswerModel.getFromJson(json.decode(rawResponse.body));
+  //     }
+  //   } catch (e) {
+  //     return null;
+  //   }
+  //   return null;
+  // }
 
   Future<ResponseBase<List<QuestionModel>>?> getListQuestionAnswer(
       int page, int limit) async {
@@ -84,12 +82,39 @@ class AppServices {
     return null;
   }
 
+  Future<ResponseBase<List<QuestionModel>>?> getListAnswerByQuestionID(
+      int questionID, int page, int limit) async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "${_baseURL}api/answer/get-answer-by-questionid?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&questionID=$questionID&page=$page&limit=$limit"));
+      if (rawResponse.statusCode == 200) {
+        return QuestionModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
   Future<ResponseBase<UserModel>?> letLogin(
       String userName, String passWord) async {
     try {
       var data = json.encode({"UserName": userName, "PassWord": passWord});
       var rawResponse =
           await _api.post(Uri.parse("${_baseURL}api/user/login"), body: data);
+      if (rawResponse.statusCode == 200) {
+        return UserModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<UserModel>?> getProfile() async {
+    try {
+      var rawResponse = await _api.get(Uri.parse(
+          "${_baseURL}api/user/profile?userID=${GetStorage().read(AppConstant.USER_USER_ID)}"));
       if (rawResponse.statusCode == 200) {
         return UserModel.getFromJson(json.decode(rawResponse.body));
       }
@@ -163,14 +188,11 @@ class AppServices {
     return false;
   }
 
-   Future<bool> postComment(int questionID , String answerContent) async {
+  Future<bool> postComment(int questionID, String answerContent) async {
     try {
       var data = json.encode({
         "auth": getAuth,
-        "data": {
-          "QuestionID": questionID,
-          "AnswerContent": answerContent
-        }
+        "data": {"QuestionID": questionID, "AnswerContent": answerContent}
       });
       var rawResponse = await _api
           .post(Uri.parse("$_baseURL/api/answer/insert-answer"), body: data);

@@ -8,10 +8,10 @@ import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:chatwiththeo/values/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 
-import '../model/answer_model.dart';
-import '../model/base_response.dart';
+import '../model/user_model.dart';
 import '../services/app_services.dart';
 import '../utils/constant.dart';
 import 'components/body_bg.dart';
@@ -32,17 +32,34 @@ class _HomeScreenState extends State<HomeScreen> {
   List<QuestionModel> listQuestion = [];
   List<QuestionModel> listQuestionAnswer = [];
 
+  UserModel? userModel;
+
   late final Future<AppState> myFuture;
   late final Future<AppState> myFuturesocial;
+  late final Future<AppState> myFutureProfile;
 
   @override
   void initState() {
-    super.initState();
     myFuture = initData();
     myFuturesocial = initDataSocial();
+    myFutureProfile = initProfile();
+
     dateController.text =
         "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}";
     timeController.text = "${dateTimeNow.hour}:${dateTimeNow.minute}";
+    super.initState();
+  }
+
+  Future<AppState> initProfile() async {
+    var response = await AppServices.instance.getProfile();
+    if (response != null) {
+      setState(() {
+        userModel = response.data!;
+      });
+    } else {
+      return Future.value(AppState.ERROR);
+    }
+    return Future.value(AppState.SUCCESS);
   }
 
   Future<AppState> initDataSocial() async {
@@ -159,16 +176,82 @@ class _HomeScreenState extends State<HomeScreen> {
         ]),
       );
 
-  Widget profilePage() => BackgroundBody(
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const SizedBox(height: 20),
-          Text(
-            "Hôm nay, 22-10-2024",
-            style: AppTheme.bodySmall.copyWith(color: Colors.black54),
-          ),
-          const SizedBox(height: 10),
-        ]),
-      );
+  Widget profilePage() => userModel == null
+      ? const Center(child: CircularProgressIndicator())
+      : BackgroundBody(
+          paddingHorizontal: 0,
+          body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 30),
+                Center(child: SvgPicture.asset("assets/logo_mix.svg")),
+                const SizedBox(height: 30),
+                Container(
+                  color: const Color(0xffE6D9D2),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      InkWell(
+                        onTap: () {},
+                        child: CircleAvatar(
+                          radius: 26,
+                          child: (GetStorage()
+                                          .read(AppConstant.USER_IMAGEPATH) ==
+                                      null ||
+                                  GetStorage()
+                                          .read(AppConstant.USER_IMAGEPATH) ==
+                                      '')
+                              ? const Icon(Icons.person, size: 26)
+                              : Image.network(GetStorage()
+                                  .read(AppConstant.USER_IMAGEPATH)),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userModel!.fullName ?? "",
+                            style: AppTheme.titleMedium20.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87),
+                          ),
+                          Text(
+                            userModel!.phone ?? "",
+                            style: AppTheme.titleMedium
+                                .copyWith(color: Colors.black54),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Thư điện tử",
+                          style: AppTheme.titleMedium18
+                              .copyWith(color: Colors.grey)),
+                      Text(userModel?.email ?? "",
+                          style: AppTheme.titleMedium18),
+                      const SizedBox(height: 10),
+                      Text("Địa chỉ",
+                          style: AppTheme.titleMedium18
+                              .copyWith(color: Colors.grey)),
+                      Text(userModel?.address ?? "",
+                          style: AppTheme.titleMedium18),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ]),
+        );
   final dateController = TextEditingController();
   final desciptionController = TextEditingController();
   final timeController = TextEditingController();
@@ -295,9 +378,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return AppScaffold(
       titlePage: "Chủ đề",
-      hidenBackButton: true,
+      hidenBackButton: false,
       hidenSearchButton: true,
-      hidenPerson: true,
+      hidenPerson: currentPageIndex == 3,
       body: [
         homePage(context),
         bookCalendar(),
@@ -355,32 +438,26 @@ class QuestionCard extends StatefulWidget {
 class _QuestionCardState extends State<QuestionCard> {
   var commentController = TextEditingController();
 
-  postComment() async {
+  Future<bool> _postComment() async {
     var result = await AppServices.instance
         .postComment(widget.data.questionID!, commentController.text);
     if (result) {
       commentController.text = '';
       SnackbarHelper.showSnackBar("Trả lời thành công");
+      return true;
     } else {
       SnackbarHelper.showSnackBar("Trả lời thất bại");
+      return false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // void showFullScreenDialog(BuildContext context) async {
-    //   Navigator.of(context).push(MaterialPageRoute<void>(
-    //     fullscreenDialog: true,
-    //     builder: (BuildContext context) {
-    //       return CardDetailPopup(data: data);
-    //     },
-    //   ));
-    // }
-
     showComment() async {
       showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
+          backgroundColor: Colors.white,
           builder: (BuildContext context) {
             return Padding(
               padding: EdgeInsets.only(
@@ -407,7 +484,13 @@ class _QuestionCardState extends State<QuestionCard> {
                       const SizedBox(height: 20),
                       AppButton("Xác nhận", () async {
                         if (commentController.text.isNotEmpty) {
-                          await postComment();
+                          var result = await _postComment();
+                          if (result) {
+                            // ignore: use_build_context_synchronously
+                            GetStorage().write(AppConstant.QUESTION_ID,
+                                widget.data.questionID);
+                            context.go("/question_detail", extra: widget.data);
+                          }
                         }
                       }, gradient: AppColors.defaultGradient),
                     ],
@@ -471,133 +554,6 @@ class _QuestionCardState extends State<QuestionCard> {
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CardDetailPopup extends StatefulWidget {
-  const CardDetailPopup({
-    super.key,
-    required this.data,
-  });
-
-  final QuestionModel data;
-
-  @override
-  State<CardDetailPopup> createState() => _CardDetailPopupState();
-}
-
-class _CardDetailPopupState extends State<CardDetailPopup> {
-  List<AnswerModel> lstData = [];
-  @override
-  void initState() {
-    super.initState();
-    initDate();
-  }
-
-  initDate() async {
-    var listCmt = await AppServices.instance
-        .getListAnswerModel(1, 10, widget.data.questionID!);
-    if (listCmt != null) {
-      setState(() {
-        lstData = listCmt.data ?? [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return AppScaffold(
-      hidenPerson: true,
-      hidenBackButton: false,
-      hidenNotify: true,
-      titlePage: '',
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: size.width - 40),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                Card(
-                  color: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Text(
-                      widget.data.questionContent ?? '',
-                      style: AppTheme.titleLarge.copyWith(
-                          color: Colors.black87,
-                          fontSize: 18,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  constraints: BoxConstraints(minWidth: size.width - 40),
-                  child: Center(
-                    child: Card(
-                        color: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        child: Column(
-                          children: [
-                            for (var item in lstData)
-                              Container(
-                                  constraints:
-                                      BoxConstraints(minWidth: size.width - 40),
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xffF4F4F4),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      border: Border.all(
-                                          color: const Color(0xff000000)
-                                              .withOpacity(.1),
-                                          width: 1)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Text(
-                                          "${item.fullName ?? ''} - ${timeago.format(item.dateCreated ?? DateTime.now())}",
-                                          style: AppTheme.bodySmall
-                                              .copyWith(color: Colors.black54),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Text(
-                                          item.answerContent ?? '',
-                                          style: AppTheme.bodySmall
-                                              .copyWith(color: Colors.black54),
-                                        ),
-                                      )
-                                    ],
-                                  ))
-                          ],
-                        )),
-                  ),
-                )
-              ],
-            ),
-          ),
         ),
       ),
     );

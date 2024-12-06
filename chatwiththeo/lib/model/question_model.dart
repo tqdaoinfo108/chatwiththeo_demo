@@ -11,7 +11,7 @@ class QuestionModel {
   int? numberComment;
   int? numberLike;
   AnswerModel? answer;
-
+  String? userUpdated;
   String? answerContent;
   String? fullname;
   DateTime? dateShared;
@@ -37,9 +37,12 @@ class QuestionModel {
     numberComment = json['NumberComment'];
     numberLike = json['NumberLike'];
     answerContent = json["AnswerContent"];
-    dateShared = json["DateShared"] == null ? DateTime.now() :DateTime.tryParse(json["DateShared"]);
+    dateShared = json["DateShared"] == null
+        ? DateTime.now()
+        : DateTime.tryParse(json["DateShared"]);
     dateSharedName = json["DateSharedName"];
     fullname = json["Fullname"];
+    userUpdated = json["UserUpdated"];
   }
 
   Map<String, dynamic> toJson() {
