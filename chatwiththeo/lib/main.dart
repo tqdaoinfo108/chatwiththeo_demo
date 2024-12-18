@@ -65,13 +65,15 @@ class MainApp extends StatelessWidget {
         var isNextHome = isUserID != null && isUserID != 0;
 
         var questionExist = GetStorage().read(AppConstant.QUESTION_ID);
-        context.go(nextPage == null || !nextPage
-            ? "/intro"
-            : questionExist != null
-                ? "/question_detail"
-                : isNextHome
-                    ? "/dashboard"
-                    : "/login");
+
+        context.go("/login/intro");
+        // context.go(nextPage == null || !nextPage
+        //     ? "/intro"
+        //     : questionExist != null
+        //         ? "/question_detail"
+        //         : isNextHome
+        //             ? "/dashboard"
+        //             : "/login");
       },
       childWidget: Stack(
         alignment: AlignmentDirectional.center,

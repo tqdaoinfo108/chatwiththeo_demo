@@ -221,4 +221,25 @@ class AppServices {
     }
     return false;
   }
+
+  Future<bool> uploadFile(String imagePath, String answerContent) async {
+    try {
+      final url = Uri.parse(
+          'http://apichatwiththeo.gvbsoft.vn/api/fileupload/uploadavarta');
+
+      final req = http.MultipartRequest('POST', url)
+        ..files.add(await http.MultipartFile.fromPath('',imagePath));
+      
+      req.headers['Content-Type'] = 'multipart/form-data';
+
+      final stream = await req.send();
+      final res = await http.Response.fromStream(stream);
+      final status = res.statusCode;
+      if (status != 200)
+        throw Exception('http.send error: statusCode= $status');
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
 }

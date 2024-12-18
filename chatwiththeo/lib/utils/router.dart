@@ -11,6 +11,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../main.dart';
+import '../screens/login_intro_screen.dart';
 import '../screens/login_register_screen.dart';
 import '../screens/notification_screen.dart';
 import '../screens/question_detail_screen.dart';
@@ -48,6 +49,13 @@ final GoRouter router = GoRouter(
               return const LoginRegisterScreen();
             },
           ),
+          GoRoute(
+            path: 'intro',
+            builder: (BuildContext context, GoRouterState state) {
+              return const LoginIntroScreen();
+            },
+          ),
+          
         ]),
     GoRoute(
       path: '/login/detail',
