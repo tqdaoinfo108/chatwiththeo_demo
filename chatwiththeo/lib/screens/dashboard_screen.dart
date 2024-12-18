@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:chatwiththeo/model/categories_model.dart';
 import 'package:chatwiththeo/screens/components/app_scaffold.dart';
 import 'package:flutter/material.dart';

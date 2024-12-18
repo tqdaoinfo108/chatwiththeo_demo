@@ -8,7 +8,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toastification/toastification.dart';
-import 'model/question_model.dart';
 import 'screens/components/app_snackbar.dart';
 import 'utils/router.dart';
 
@@ -62,7 +61,7 @@ class MainApp extends StatelessWidget {
           GetStorage().remove(AppConstant.USER_USER_ID);
           GetStorage().remove(AppConstant.QUESTION_ID);
         }
-        var isUserID = GetStorage().read(AppConstant.IS_REMEMBER);
+        var isUserID = GetStorage().read(AppConstant.USER_USER_ID);
         var isNextHome = isUserID != null && isUserID != 0;
 
         var questionExist = GetStorage().read(AppConstant.QUESTION_ID);
@@ -70,11 +69,9 @@ class MainApp extends StatelessWidget {
             ? "/intro"
             : questionExist != null
                 ? "/question_detail"
-                : questionExist != null
-                    ? "/question_detail"
-                    : isNextHome
-                        ? "/dashboard"
-                        : "/login");
+                : isNextHome
+                    ? "/dashboard"
+                    : "/login");
       },
       childWidget: Stack(
         alignment: AlignmentDirectional.center,

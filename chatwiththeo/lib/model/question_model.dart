@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chatwiththeo/model/base_response.dart';
 
 import 'answer_model.dart';
@@ -14,9 +16,11 @@ class QuestionModel {
   String? userUpdated;
   String? answerContent;
   String? fullname;
-  DateTime? dateShared;
+  // DateTime? dateShared;
   String? dateAnswerName;
   String? dateSharedName;
+  bool? onBackNormal;
+  int? questionUserId;
 
   QuestionModel(
       {this.questionID,
@@ -25,7 +29,8 @@ class QuestionModel {
       this.fullName,
       this.answerID,
       this.numberComment,
-      this.numberLike});
+      this.numberLike,
+      this.onBackNormal});
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
     // answer =
@@ -38,25 +43,30 @@ class QuestionModel {
     numberComment = json['NumberComment'];
     numberLike = json['NumberLike'];
     answerContent = json["AnswerContent"];
-    dateShared = json["DateShared"] == null
-        ? DateTime.now()
-        : DateTime.tryParse(json["DateShared"]);
+    // dateShared = DateTime.tryParse(json["DateShared"]);
     dateSharedName = json["DateSharedName"];
     dateAnswerName = json["DateAnswerName"];
-    fullname = json["FullName"];
+    fullname = json["FullName"] ?? json["Fullname"];
     userUpdated = json["UserUpdated"];
+    onBackNormal = json["onBackNormal"] ?? true;
   }
-
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['QuestionID'] = this.questionID;
-    data['UserID'] = this.userID;
-    data['QuestionContent'] = this.questionContent;
-    data['FullName'] = this.fullName;
-    data['AnswerID'] = this.answerID;
-    data['NumberComment'] = this.numberComment;
-    data['NumberLike'] = this.numberLike;
-    return data;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["QuestionUserID"] = questionUserId;
+    _data["QuestionID"] = questionID;
+    _data["UserID"] = userID;
+    // _data["IsLock"] = isLock;
+    _data["AnswerID"] = answerID;
+    _data["AnswerContent"] = answerContent;
+    // _data["IsShared"] = isShared;
+    // _data["DateShared"] = dateShared;
+    _data["DateSharedName"] = dateSharedName;
+    _data["NumberComment"] = numberComment;
+    _data["NumberLike"] = numberLike;
+    _data["QuestionContent"] = questionContent;
+    _data["Fullname"] = fullname;
+    _data["onBackNormal"] = true;
+    return _data;
   }
 
   static ResponseBase<List<QuestionModel>>? getFromJson(

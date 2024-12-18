@@ -499,8 +499,8 @@ class _QuestionCardState extends State<QuestionCard> {
                           var result = await _postComment();
                           if (result) {
                             // ignore: use_build_context_synchronously
-                            await GetStorage()
-                                .write(AppConstant.QUESTION_ID, widget.data.toJson());
+                            await GetStorage().write(
+                                AppConstant.QUESTION_ID, widget.data.toJson());
                             context.go("/question_detail", extra: widget.data);
                           }
                         }
@@ -580,106 +580,112 @@ class SocialCardWidget extends StatelessWidget {
   final QuestionModel data;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              spreadRadius: 1,
-              blurRadius: 6,
-              offset: Offset.zero, // changes position of shadow
-            ),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          border: Border.all(
-              color: const Color(0xff000000).withOpacity(.1), width: 1)),
-      child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  data.questionContent ?? '',
-                  style: AppTheme.bodySmall
-                      .copyWith(color: Colors.black, fontSize: 16),
-                ),
+    return InkWell(
+      onTap: () =>
+          context.push("/question_detail", extra: data..onBackNormal = false),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset.zero, // changes position of shadow
               ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset("assets/favorite.svg"),
-                            const SizedBox(width: 5),
-                            Text("${data.numberLike}")
-                          ],
-                        ),
-                        const SizedBox(width: 30),
-                        Row(
-                          children: [
-                            SvgPicture.asset("assets/comment.svg"),
-                            const SizedBox(width: 5),
-                            Text("${data.numberComment}")
-                          ],
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    // Text(
-                    //   timeago
-                    //       .format(data.answer?.dateCreated ?? DateTime.now()),
-                    //   style: AppTheme.bodySmall.copyWith(color: Colors.black54),
-                    // ),
-                  ],
+            ],
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            border: Border.all(
+                color: const Color(0xff000000).withOpacity(.1), width: 1)),
+        child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    data.questionContent ?? '',
+                    style: AppTheme.bodySmall
+                        .copyWith(color: Colors.black, fontSize: 16),
+                  ),
                 ),
-              ),
-              (data.answerContent == null || data.answerContent == '')
-                  ? const SizedBox(height: 10)
-                  : Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: const Color(0xffF4F4F4),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
-                          border: Border.all(
-                              color: const Color(0xff000000).withOpacity(.1),
-                              width: 1)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              "${data.fullname ?? ''} - ${data.dateSharedName}",
-                              style: AppTheme.bodySmall
-                                  .copyWith(color: Colors.black54),
-                            ),
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/favorite.svg"),
+                              const SizedBox(width: 5),
+                              Text("${data.numberLike}")
+                            ],
                           ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              data.answerContent ?? '',
-                              style: AppTheme.bodySmall
-                                  .copyWith(color: Colors.black54),
-                            ),
-                          ),
+                          const SizedBox(width: 30),
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/comment.svg"),
+                              const SizedBox(width: 5),
+                              Text("${data.numberComment}")
+                            ],
+                          )
                         ],
                       ),
-                    )
-            ],
-          )),
+                      const Spacer(),
+                      // Text(
+                      //   timeago
+                      //       .format(data.answer?.dateCreated ?? DateTime.now()),
+                      //   style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+                      // ),
+                    ],
+                  ),
+                ),
+                (data.answerContent == null || data.answerContent == '')
+                    ? const SizedBox(height: 10)
+                    : Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: const Color(0xffF4F4F4),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            border: Border.all(
+                                color: const Color(0xff000000).withOpacity(.1),
+                                width: 1)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "${data.fullname ?? ''} - ${data.dateSharedName}",
+                                style: AppTheme.bodySmall
+                                    .copyWith(color: Colors.black54),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                data.answerContent ?? '',
+                                style: AppTheme.bodySmall
+                                    .copyWith(color: Colors.black54),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+              ],
+            )),
+      ),
     );
   }
 }

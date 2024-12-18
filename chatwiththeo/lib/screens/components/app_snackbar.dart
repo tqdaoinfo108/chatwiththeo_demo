@@ -11,7 +11,9 @@ class SnackbarHelper {
 
   static void showSnackBar(String? message, ToastificationType type) =>
       toastification.show(
-        title: Text(message ?? "", style: AppTheme.titleMedium.copyWith(color: Colors.black87)),
+        backgroundColor: Colors.white,
+        title: Text(message ?? "",
+            style: AppTheme.titleMedium.copyWith(color: Colors.black87)),
         type: type,
         autoCloseDuration: const Duration(seconds: 5),
       );

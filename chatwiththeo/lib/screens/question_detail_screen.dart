@@ -11,13 +11,9 @@ import 'components/app_snackbar.dart';
 import 'components/app_textfield.dart';
 
 class QuestionDetailScreen extends StatefulWidget {
-  const QuestionDetailScreen({
-    super.key,
-    required this.data,
-  });
+  const QuestionDetailScreen({super.key, required this.data});
 
   final QuestionModel data;
-
   @override
   State<QuestionDetailScreen> createState() => _QuestionDetailScreenState();
 }
@@ -67,36 +63,41 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
       hidenNotify: true,
       titlePage: 'Câu hỏi',
       onBack: () {
-        showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title:  Text('Thông báo', style: AppTheme.titleLarge.copyWith(color: Colors.black)),
-                content: const Text(
-                  'Bạn có chắc chắn muốn thoát câu hỏi này ?',
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    child: const Text('Huỷ'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    child: const Text('Đồng ý'),
-                    onPressed: () {
-                      context.go("/dashboard");
-                    },
-                  ),
-                ],
-              );
-            });
+        (widget.data.onBackNormal ?? true)
+            ? showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('Thông báo',
+                        style:
+                            AppTheme.titleLarge.copyWith(color: Colors.black)),
+                    content: Text('Bạn có chắc chắn muốn thoát câu hỏi này ?',
+                        style:
+                            AppTheme.titleMedium.copyWith(color: Colors.black)),
+                    actions: <Widget>[
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('Huỷ'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('Đồng ý'),
+                        onPressed: () {
+                          context.go("/dashboard");
+                        },
+                      ),
+                    ],
+                  );
+                })
+            : context.pop();
       },
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -159,9 +160,8 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
                                               horizontal: 10),
                                           child: Text(
                                             "${item.userUpdated ?? ''} - ${item.dateAnswerName}",
-                                            style: AppTheme.bodySmall
-                                                .copyWith(
-                                                    color: Colors.black54),
+                                            style: AppTheme.bodySmall.copyWith(
+                                                color: Colors.black54),
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -170,9 +170,8 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
                                               horizontal: 20),
                                           child: Text(
                                             item.answerContent ?? '',
-                                            style: AppTheme.bodySmall
-                                                .copyWith(
-                                                    color: Colors.black54),
+                                            style: AppTheme.bodySmall.copyWith(
+                                                color: Colors.black54),
                                           ),
                                         )
                                       ],

@@ -32,7 +32,8 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      contextSecond: context,
+        hidenBackButton: false,
+        contextSecond: context,
         titlePage: "Đăng nhập",
         hidenPerson: true,
         hidenNotify: true,
