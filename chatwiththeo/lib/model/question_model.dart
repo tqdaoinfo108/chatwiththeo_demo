@@ -50,7 +50,7 @@ class QuestionModel {
     userUpdated = json["UserUpdated"];
     onBackNormal = json["onBackNormal"] ?? true;
   }
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(bool? onBackNormal) {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["QuestionUserID"] = questionUserId;
     _data["QuestionID"] = questionID;
@@ -65,7 +65,7 @@ class QuestionModel {
     _data["NumberLike"] = numberLike;
     _data["QuestionContent"] = questionContent;
     _data["Fullname"] = fullname;
-    _data["onBackNormal"] = true;
+    _data["onBackNormal"] = onBackNormal ?? true;
     return _data;
   }
 

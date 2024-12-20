@@ -18,7 +18,7 @@ dependencies:
   board_datetime_picker: ^2.1.6
   timeago: ^3.7.0
   toastification: ^2.3.0
-  gallery_picker: ^0.5.1
+  hl_image_picker: ^1.2.16
   
   flutter:
     sdk: flutter

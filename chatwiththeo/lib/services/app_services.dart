@@ -222,24 +222,41 @@ class AppServices {
     return false;
   }
 
-  Future<bool> uploadFile(String imagePath, String answerContent) async {
+  Future<bool> updateImage(String imagePath) async {
+    try {
+      var rawResponse = await _api.post(
+          Uri.parse(
+              "$_baseURL/api/user/imageupdate?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&page=$imagePath"),
+          body: {});
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  Future<ResponseBase<String>?> uploadFile(String imagePath) async {
     try {
       final url = Uri.parse(
           'http://apichatwiththeo.gvbsoft.vn/api/fileupload/uploadavarta');
 
       final req = http.MultipartRequest('POST', url)
-        ..files.add(await http.MultipartFile.fromPath('',imagePath));
-      
+        ..files.add(await http.MultipartFile.fromPath('', imagePath));
+
       req.headers['Content-Type'] = 'multipart/form-data';
 
       final stream = await req.send();
       final res = await http.Response.fromStream(stream);
       final status = res.statusCode;
-      if (status != 200)
+      if (status != 200) {
         throw Exception('http.send error: statusCode= $status');
+      }
+      return ResponseBase<String>.fromJson(jsonDecode(res.body));
     } catch (e) {
-      return false;
+      return null;
     }
-    return false;
   }
 }

@@ -75,7 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       contextSecond: context,
                       titlePage: "Chủ đề",
                       body: homePage,
-                      hidenBackButton: true,
+                      hidenBackButton: false,
                       hidenSearchButton: true,
                     )
                   : const Center(

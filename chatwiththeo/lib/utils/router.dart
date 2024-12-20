@@ -55,7 +55,6 @@ final GoRouter router = GoRouter(
               return const LoginIntroScreen();
             },
           ),
-          
         ]),
     GoRoute(
       path: '/login/detail',

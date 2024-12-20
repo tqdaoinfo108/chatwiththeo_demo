@@ -204,18 +204,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 20),
                       InkWell(
                         onTap: () {},
-                        child: CircleAvatar(
-                          radius: 26,
-                          child: (GetStorage()
-                                          .read(AppConstant.USER_IMAGEPATH) ==
-                                      null ||
-                                  GetStorage()
-                                          .read(AppConstant.USER_IMAGEPATH) ==
-                                      '')
-                              ? const Icon(Icons.person, size: 26)
-                              : Image.network(GetStorage()
-                                  .read(AppConstant.USER_IMAGEPATH)),
-                        ),
+                        child: (GetStorage().read(AppConstant.USER_IMAGEPATH) ==
+                                    null ||
+                                GetStorage().read(AppConstant.USER_IMAGEPATH) ==
+                                    '')
+                            ? const CircleAvatar(
+                                radius: 30, child: Icon(Icons.person))
+                            : CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(GetStorage()
+                                    .read(AppConstant.USER_IMAGEPATH)),
+                              ),
                       ),
                       const SizedBox(width: 20),
                       Column(
@@ -499,8 +498,8 @@ class _QuestionCardState extends State<QuestionCard> {
                           var result = await _postComment();
                           if (result) {
                             // ignore: use_build_context_synchronously
-                            await GetStorage().write(
-                                AppConstant.QUESTION_ID, widget.data.toJson());
+                            await GetStorage().write(AppConstant.QUESTION_ID,
+                                widget.data.toJson(true));
                             context.go("/question_detail", extra: widget.data);
                           }
                         }
@@ -581,8 +580,10 @@ class SocialCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          context.push("/question_detail", extra: data..onBackNormal = false),
+      onTap: () {
+        GetStorage().write(AppConstant.QUESTION_ID, data.toJson(false));
+        context.push("/question_detail", extra: data..onBackNormal = false);
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(

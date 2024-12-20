@@ -138,8 +138,10 @@ class _LoginDetailScreenState extends State<LoginDetailScreen> {
                             AppConstant.USER_USER_ID, response.data!.userID);
                         GetStorage().write(
                             AppConstant.USER_USERNAME, response.data!.userName);
+                        GetStorage().write(
+                            AppConstant.USER_FULLNAME, response.data!.fullName);
                         // ignore: use_build_context_synchronously
-                        this.context.go("/dashboard");
+                        context.go("/login/intro");
                       } else {
                         SnackbarHelper.showSnackBar(
                             "Email hoặc mật khẩu không đúng",

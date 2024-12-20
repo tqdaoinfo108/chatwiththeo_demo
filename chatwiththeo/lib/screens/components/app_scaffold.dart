@@ -89,13 +89,13 @@ class AppScaffold extends StatelessWidget {
                               context.go("/login");
                               GetStorage().erase();
                             },
-                            child: CircleAvatar(
-                              radius: 18,
-                              child: (image == null || image == '')
-                                  ? const Icon(Icons.person)
-                                  : Image.network(GetStorage()
-                                      .read(AppConstant.USER_IMAGEPATH)),
-                            ),
+                            child: (image == null || image == '')
+                                ? const CircleAvatar(
+                                    radius: 18, child: Icon(Icons.person))
+                                : CircleAvatar(
+                                    radius: 18,
+                                    backgroundImage: NetworkImage(image),
+                                  ),
                           ),
                     const SizedBox(width: 10),
                   ],

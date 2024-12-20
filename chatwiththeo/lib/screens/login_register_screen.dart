@@ -167,11 +167,12 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
                         GetStorage().write(
                             AppConstant.USER_USERNAME, response.data!.userName);
                         // ignore: use_build_context_synchronously
-                        this.context.go("/dashboard");
-                        SnackbarHelper.showSnackBar("Đăng nhập thành công",
-                            ToastificationType.error);
+                        context.go("/login/intro");
+                        SnackbarHelper.showSnackBar(
+                            "Đăng nhập thành công", ToastificationType.error);
                       } else {
-                        SnackbarHelper.showSnackBar("Lỗi !!!", ToastificationType.error);
+                        SnackbarHelper.showSnackBar(
+                            "Lỗi !!!", ToastificationType.error);
                       }
                     }
                   }, gradient: AppColors.defaultGradient),
