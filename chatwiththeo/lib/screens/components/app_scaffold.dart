@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../utils/constant.dart';
+import 'button.dart';
 
 // ignore: must_be_immutable
 class AppScaffold extends StatelessWidget {
@@ -19,7 +20,9 @@ class AppScaffold extends StatelessWidget {
       this.hidenPerson,
       this.hidenNotify,
       required this.contextSecond,
-      this.onBack});
+      this.onBack,
+      this.onUpdatePerson,
+      this.isShowUpdatePerson});
 
   String titlePage;
   Widget body;
@@ -31,6 +34,9 @@ class AppScaffold extends StatelessWidget {
   final bool? hidenNotify;
   final BuildContext contextSecond;
   final Function()? onBack;
+  final Function()? onUpdatePerson;
+  final bool? isShowUpdatePerson;
+
   @override
   Widget build(BuildContext context) {
     var image = GetStorage().read(AppConstant.USER_IMAGEPATH);
@@ -85,10 +91,7 @@ class AppScaffold extends StatelessWidget {
                     (hidenPerson ?? false)
                         ? const SizedBox()
                         : InkWell(
-                            onTap: () {
-                              context.go("/login");
-                              GetStorage().erase();
-                            },
+                            onTap: () {},
                             child: (image == null || image == '')
                                 ? const CircleAvatar(
                                     radius: 18, child: Icon(Icons.person))
@@ -96,6 +99,13 @@ class AppScaffold extends StatelessWidget {
                                     radius: 18,
                                     backgroundImage: NetworkImage(image),
                                   ),
+                          ),
+                    !(isShowUpdatePerson ?? false)
+                        ? const SizedBox()
+                        : SizedBox(
+                            width: 80,
+                            height: 36,
+                            child: AppButton("Sửa", onUpdatePerson!),
                           ),
                     const SizedBox(width: 10),
                   ],

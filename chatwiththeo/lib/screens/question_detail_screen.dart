@@ -1,5 +1,6 @@
 import 'package:chatwiththeo/values/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import '../model/question_model.dart';
@@ -24,6 +25,9 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
   void initState() {
     super.initState();
     initDate();
+    if (!context.canPop()) {
+      widget.data.onBackNormal = true;
+    }
   }
 
   initDate() async {
@@ -137,45 +141,7 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
                           child: Column(
                             children: [
                               for (var item in lstData)
-                                Container(
-                                    constraints: BoxConstraints(
-                                        minWidth: size.width - 40),
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xffF4F4F4),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10.0)),
-                                        border: Border.all(
-                                            color: const Color(0xff000000)
-                                                .withOpacity(.1),
-                                            width: 1)),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Text(
-                                            "${item.userUpdated ?? ''} - ${item.dateAnswerName}",
-                                            style: AppTheme.bodySmall.copyWith(
-                                                color: Colors.black54),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Text(
-                                            item.answerContent ?? '',
-                                            style: AppTheme.bodySmall.copyWith(
-                                                color: Colors.black54),
-                                          ),
-                                        )
-                                      ],
-                                    ))
+                                QuestionCardDetail(size: size, item: item)
                             ],
                           ),
                         )),
@@ -211,6 +177,139 @@ class _QuestionDetailScreenState extends State<QuestionDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class QuestionCardDetail extends StatelessWidget {
+  const QuestionCardDetail({
+    super.key,
+    required this.size,
+    required this.item,
+  });
+
+  final Size size;
+  final QuestionModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Container(
+            constraints: BoxConstraints(minWidth: size.width - 40),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: const Color(0xffF4F4F4),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                border: Border.all(
+                    color: const Color(0xff000000).withOpacity(.1), width: 1)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    "${item.userUpdated ?? ''} - ${item.dateAnswerName}",
+                    style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    item.answerContent ?? '',
+                    style: AppTheme.bodySmall.copyWith(color: Colors.black54),
+                  ),
+                )
+              ],
+            )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    builder: (BuildContext context) {
+                      return SizedBox(
+                        height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  var response = await AppServices.instance
+                                      .insertLike(item.answerID!);
+                                  if (response != null) {
+                                    SnackbarHelper.showSnackBar(
+                                        "Thích lời thành công",
+                                        ToastificationType.success);
+                                  } else {
+                                    SnackbarHelper.showSnackBar(
+                                        "Thích thất bại",
+                                        ToastificationType.error);
+                                  }
+                                  context.pop();
+                                },
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset("assets/favorite.svg",
+                                        height: 60, width: 60),
+                                    Text("Thích câu\ntrả lời",
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.titleMedium
+                                            .copyWith(color: Colors.black))
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  var response = await AppServices.instance
+                                      .insertShare(item.answerID!);
+                                  if (response != null) {
+                                    SnackbarHelper.showSnackBar(
+                                        "Chia sẻ thành công",
+                                        ToastificationType.success);
+                                  } else {
+                                    SnackbarHelper.showSnackBar(
+                                        "Chia sẻ thất bại",
+                                        ToastificationType.error);
+                                  }
+                                  context.pop();
+                                },
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset("assets/share.svg",
+                                        height: 60, width: 60),
+                                    Text(
+                                      "Chia sẻ\ncộng đồng",
+                                      textAlign: TextAlign.center,
+                                      style: AppTheme.titleMedium
+                                          .copyWith(color: Colors.black),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey,
+                )),
+            const SizedBox(width: 20),
+          ],
+        ),
+      ],
     );
   }
 }

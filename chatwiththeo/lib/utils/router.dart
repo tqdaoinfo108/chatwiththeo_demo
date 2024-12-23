@@ -79,6 +79,7 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         var model =
             QuestionModel.fromJson(GetStorage().read(AppConstant.QUESTION_ID));
+
         return QuestionDetailScreen(data: model);
       },
     ),

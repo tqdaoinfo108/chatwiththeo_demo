@@ -11,12 +11,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
-
 import '../model/user_model.dart';
 import '../services/app_services.dart';
 import '../utils/constant.dart';
 import 'components/body_bg.dart';
 import 'components/button.dart';
+import 'home_profile_update_screen.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
@@ -256,6 +256,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: AppButton("Đăng xuất", () {
+                    GetStorage().erase();
+                    context.go("/login");
+                  }),
+                ),
                 const SizedBox(height: 30),
               ]),
         );
@@ -385,12 +393,35 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
 
+    showPopupUpdateUser() {
+      showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierColor: Colors.black45,
+          transitionDuration: const Duration(milliseconds: 200),
+          pageBuilder: (BuildContext buildContext, Animation animation,
+              Animation secondaryAnimation) {
+            return const HomeProfileUpdateScreen();
+          }).whenComplete(() async {
+        var reponseUSer = await AppServices.instance.getProfile();
+        if (reponseUSer != null) {
+          setState(() {
+            userModel = reponseUSer.data!;
+          });
+        }
+      });
+    }
+
     return AppScaffold(
       contextSecond: context,
       titlePage: "Chủ đề",
       hidenBackButton: false,
       hidenSearchButton: true,
       hidenPerson: currentPageIndex == 3,
+      isShowUpdatePerson: currentPageIndex == 3,
+      onUpdatePerson: () => showPopupUpdateUser.call(),
       body: [
         homePage(context),
         bookCalendar(),

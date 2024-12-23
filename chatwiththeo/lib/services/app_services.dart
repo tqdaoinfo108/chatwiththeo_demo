@@ -15,7 +15,8 @@ class AppServices {
   late http.Client _api;
   static const String _baseURL = "http://apichatwiththeo.gvbsoft.vn/";
   AppServices._privateConstructor() {
-    _api = BasicAuthClient("username", "password");
+    _api =
+        BasicAuthClient("UserAPIOtoTrackingStore", "PassAPIOtoTrackingStore");
   }
 
   static Map get getAuth => {
@@ -154,6 +155,21 @@ class AppServices {
     return null;
   }
 
+  Future<ResponseBase<UserModel>?> letUpdateUser(
+      Map<String, dynamic> data) async {
+    try {
+      var rawResponse = await _api.post(Uri.parse("${_baseURL}api/user/update"),
+          body: jsonEncode(data));
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return UserModel.getFromJson(json.decode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
   Future<ResponseBase<List<PositionModel>>?> getListPosition() async {
     try {
       var rawResponse = await _api
@@ -222,20 +238,20 @@ class AppServices {
     return false;
   }
 
-  Future<bool> updateImage(String imagePath) async {
+  Future<ResponseBase<String>?> updateImage(String imagePath) async {
     try {
       var rawResponse = await _api.post(
           Uri.parse(
-              "$_baseURL/api/user/imageupdate?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&page=$imagePath"),
+              "$_baseURL/api/user/imageupdate?userID=${GetStorage().read(AppConstant.USER_USER_ID)}&imagePath=$imagePath"),
           body: {});
       if (rawResponse.statusCode == 200 &&
           json.decode(rawResponse.body)["message"] == null) {
-        return true;
+        return ResponseBase<String>.fromJson(jsonDecode(rawResponse.body));
       }
     } catch (e) {
-      return false;
+      return null;
     }
-    return false;
+    return null;
   }
 
   Future<ResponseBase<String>?> uploadFile(String imagePath) async {
@@ -258,5 +274,49 @@ class AppServices {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<ResponseBase<String>?> insertLike(int answerID) async {
+    try {
+      var data = json.encode({
+        "auth": getAuth,
+        "data": {
+          "UserID": GetStorage().read(AppConstant.USER_USER_ID),
+          "AnswerID": answerID,
+          "CommentContent": ""
+        }
+      });
+
+      var rawResponse = await _api.post(
+          Uri.parse("$_baseURL/api/user-answer-like/insert-like"),
+          body: data);
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return ResponseBase<String>.fromJson(jsonDecode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  Future<ResponseBase<QuestionModel>?> insertShare(int answerID) async {
+    try {
+      var data = json.encode({
+        "auth": getAuth,
+        "data": {"AnswerID": answerID, "IsShare": true}
+      });
+
+      var rawResponse = await _api.post(
+          Uri.parse("$_baseURL/api/answer/insert-answer-share"),
+          body: data);
+      if (rawResponse.statusCode == 200 &&
+          json.decode(rawResponse.body)["message"] == null) {
+        return QuestionModel.getObjectFromJson(jsonDecode(rawResponse.body));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
   }
 }

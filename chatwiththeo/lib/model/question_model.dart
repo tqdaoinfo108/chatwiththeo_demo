@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chatwiththeo/model/base_response.dart';
 
 import 'answer_model.dart';
@@ -81,6 +79,22 @@ class QuestionModel {
       return ResponseBase<List<QuestionModel>>(
         totals: json['totals'] ?? json['total'],
         data: list,
+      );
+    } else {
+      return ResponseBase();
+    }
+  }
+
+  static ResponseBase<QuestionModel>? getObjectFromJson(
+      Map<String, dynamic> json) {
+    if (json["message"] == null) {
+      var item = new QuestionModel();
+      if (json['data'] != null) {
+        item = QuestionModel.fromJson(json['data']);
+      }
+      return ResponseBase<QuestionModel>(
+        totals: json['totals'] ?? json['total'],
+        data: item,
       );
     } else {
       return ResponseBase();

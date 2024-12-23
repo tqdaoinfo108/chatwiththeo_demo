@@ -1,3 +1,4 @@
+import '../services/app_services.dart';
 import 'base_response.dart';
 
 class UserModel {
@@ -27,6 +28,29 @@ class UserModel {
       this.statusID,
       this.numberLogin,
       this.lastLogin});
+
+  Map<String, dynamic> toJsonUpdate(String _fullName,
+      String _address, String _phone, String _email, int _positionID) {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["UserID"] = userID;
+    _data["ImagePath"] = imagesPaths;
+    _data["TypeUserID"] = typeUserID;
+    _data["PositionID"] = _positionID;
+    _data["UserName"] = userName;
+    _data["FullName"] = _fullName;
+    _data["Email"] = _email;
+    _data["Address"] = _address;
+    _data["Phone"] = _phone;
+    _data["StatusID"] = 1;
+    _data["NumberLogin"] = numberLogin;
+    _data["LastLogin"] = lastLogin;
+
+    final Map<String, dynamic> _data2 = <String, dynamic>{};
+    _data2["auth"] = AppServices.getAuth;
+    _data2["data"] = _data;
+
+    return _data2;
+  }
 
   UserModel.fromJson(Map<String, dynamic> json) {
     userID = json['UserID'];

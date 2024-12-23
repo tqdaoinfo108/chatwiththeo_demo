@@ -26,10 +26,14 @@ class _LoginIntroScreenState extends State<LoginIntroScreen> {
     final images = await _picker.openPicker();
     var response = await AppServices.instance.uploadFile(images.first.path);
     if (response != null) {
-      GetStorage().write(AppConstant.USER_IMAGEPATH, response.data);
-      setState(() {
-        imagePath = response.data;
-      });
+      var updateImage = await AppServices.instance.updateImage(response.data!);
+      if (updateImage != null) {
+        GetStorage().write(AppConstant.USER_IMAGEPATH, updateImage.data);
+        setState(() {
+          imagePath = updateImage.data;
+        });
+      }
+
       SnackbarHelper.showSnackBar("Thành công", ToastificationType.success);
     } else {
       SnackbarHelper.showSnackBar("Huỷ chọn file", ToastificationType.warning);
