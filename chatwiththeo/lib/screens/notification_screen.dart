@@ -53,6 +53,7 @@ class _NotificationScreenState extends State<NotificationScreen>
               TabBar(
                 dividerHeight: 4,
                 padding: const EdgeInsets.symmetric(vertical: 10),
+                dividerColor: Colors.grey,
                 indicator: UnderlineTabIndicator(
                     borderSide:
                         const BorderSide(width: 4.0, color: AppColors.subColor),
@@ -82,52 +83,54 @@ class _NotificationScreenState extends State<NotificationScreen>
                         style: AppTheme.titleMedium18,
                       ),
                     ),
-                    listData.isEmpty ? Center(
-                      child: Text(
-                        "Không có dữ liệu",
-                        style: AppTheme.titleMedium18,
-                      ),
-                    ) : ListView.builder(
-                        itemCount: listData.length,
-                        itemBuilder: (c, i) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: const Color(0xffF4F4F4),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0)),
-                                border: Border.all(
-                                    color:
-                                        const Color(0xff000000).withOpacity(.1),
-                                    width: 1)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    listData[i].dateSchedule ?? "",
-                                    style: AppTheme.bodySmall
-                                        .copyWith(color: Colors.black54),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Text(
-                                    listData[i].description ?? "",
-                                    style: AppTheme.bodySmall
-                                        .copyWith(color: Colors.black54),
-                                  ),
-                                ),
-                              ],
+                    listData.isEmpty
+                        ? Center(
+                            child: Text(
+                              "Không có dữ liệu",
+                              style: AppTheme.titleMedium18,
                             ),
-                          );
-                        })
+                          )
+                        : ListView.builder(
+                            itemCount: listData.length,
+                            itemBuilder: (c, i) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffF4F4F4),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10.0)),
+                                    border: Border.all(
+                                        color: const Color(0xff000000)
+                                            .withOpacity(.1),
+                                        width: 1)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                        listData[i].dateSchedule ?? "",
+                                        style: AppTheme.bodySmall
+                                            .copyWith(color: Colors.black54),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Text(
+                                        listData[i].description ?? "",
+                                        style: AppTheme.bodySmall
+                                            .copyWith(color: Colors.black54),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            })
                   ],
                 ),
               ),

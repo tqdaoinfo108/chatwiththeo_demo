@@ -330,6 +330,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             onChanged: (v) {
                               setState(() {
                                 dateTimeNow = v;
+                                dateController.text =
+                                    "${dateTimeNow.day}/${dateTimeNow.month}/${dateTimeNow.year}";
+                                timeController.text =
+                                    "${dateTimeNow.hour}:${dateTimeNow.minute}";
                               });
                             },
                             enableDrag: true);
@@ -376,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 textInputAction: TextInputAction.none,
                 titleText: "",
                 labelText: '',
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 minLines: 4,
                 controller: desciptionController,
               ),
@@ -680,6 +684,7 @@ class SocialCardWidget extends StatelessWidget {
                 (data.answerContent == null || data.answerContent == '')
                     ? const SizedBox(height: 10)
                     : Container(
+                        width: double.infinity,
                         margin: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 20),
                         padding: const EdgeInsets.all(10),
